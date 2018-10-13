@@ -1,0 +1,615 @@
+```{r global_options, include = FALSE}
+knitr::opts_chunk$set(message=FALSE, warning = FALSE, echo=FALSE)
+```
+
+<head>
+<style>
+#top {
+    background: linear-gradient(to right, #ff9966 0%, #3399ff 100%);
+}
+</style>
+</head>
+
+<center>
+<div id = top>
+<font size = 8 color = 'black'>Prosper.com Exploratory Data Analysis</font>
+<br />
+<font size = 5 color = 'black'>by Sheng BI</font>
+<br />
+<br />
+<font size = 6 color = 'white'>Part I</font>
+</div>
+</center>
+
+<font size = 6>Background</font>
+
+> Prosper is a peer-to-peear lending marketplace, with over $13 billion in funded loans. Its initiative is to allow people to invest in each other in a way which is socially and financially rewarding. On Prosper, borrowers can request loans ranging from $2,000 to $40,000. The minium investment per loan is $25, making it easier for people to get involved. During these years, the quality of the borrowers has been improving, and the return for the investors has been increasing steadily.
+
+## Data Cleaning - remove duplicate observations 
+
+> The ListingKey is supposed to be unique, but there are duplicates. 
+
+> My Solution: I find that these entries only differ in the value of 'ProsperScore'. This suggests that the ProsperScore of some entry was adjusted for some reason. I clean the data in the following way: whenever I encounter duplicate observations for the same ListingKey, I will keep the latest observation. (By 'latest', I mean the greatest row index among dublicate Listingkeys.)
+
+```{r echo=FALSE, eval=T, message=FALSE, warning=FALSE, packages}
+# Load all of the packages that you end up using
+# in your analysis in this code chunk.
+
+library(ggplot2)
+library(robustbase)
+library(magrittr)
+# library(ggpubr)
+# library(ggExtra)
+# library(gridExtra)
+# library(plyr)
+library(dplyr)
+```
+
+```{r echo=FALSE, eval=T, Load_the_Data}
+
+# Load and Clean the Data
+
+## read data
+df <- read.csv('prosperLoanData.csv', 
+               stringsAsFactors = FALSE,
+               na.strings = c(''))
+
+## find the duplicate Listing Keys
+find_duplicates <- function(x) {
+  df_duplicates <- x %>%
+    plyr::ddply(.data=., .variables = 'ListingKey',
+                .fun = function(subdf) nrow(subdf)) %>%
+    subset(x=., V1>=2)
+  return(df_duplicates)
+}
+
+df_listingkey_m <- find_duplicates(df)
+
+## remove duplicates
+
+remove_dup <- function(x =df, dup = df_listingkey_m$ListingKey) {
+  
+  rows_kept <- c()
+  
+  df1 <- x[x$ListingKey %in% dup,]
+  
+  for (each in dup) {
+    temp_df1 <- subset(df1, ListingKey == each)
+    rows_kept <- c(rows_kept, max(rownames(temp_df1)))
+  }
+  
+  df1_removed <- df1[!(rownames(df1) %in% rows_kept), ]
+  
+  final_df <- x[!(rownames(x) %in% rownames(df1_removed)), ]
+  
+  return(final_df)
+}
+
+## get the cleaned data frame
+df2 <- remove_dup()
+
+rm(df_listingkey_m)
+
+```
+
+> Now we get the cleaned data `df2`. The dataframe has 113066 rows and 81 columns.
+
+```{r echo = TRUE, eval=T, Dimension}
+dim(df2)
+```
+
+> There are many cells which contain missing data. The columns that have more than 80% NA's are presented as follows.
+
+```{r echo = TRUE, eval=T, Missing}
+colnames(df2[ ,colSums(is.na(df2)) > nrow(df2)*0.20])
+```
+
+## Univariate Plots Section
+
+> In this section, We will use summary tables and univariate plots to describe our data.
+
+### (1) Loan Information
+
+<font size = 4>- (1.1) Number of Loans by Year </font>
+
+> During the period of financial crisis (2008 and 2009), Prosper closed down both the borrower and investor side of the business. No new loans were issued during the Prosper quiet period. (See Reference 1.) Hence, we observe a decrease of activities in these two years. Otherwise, we would expect to see that the number loans kept increasing.
+
+```{r echo=FALSE, eval = T, Number_of_Loans_by_Time}
+df2 %>%
+  dplyr::mutate(.data = ., 
+                Time = as.Date(x = substr(x = .$LoanOriginationDate,
+                                           start = 1, stop = 10), 
+                                format = '%Y-%m-%d')) %>%
+  dplyr::mutate(.data = .,
+                after_july2009 = 
+                  ifelse(.$Time > as.Date('2009-07-01'),
+                         yes = TRUE, no = FALSE)) %>%
+  ggplot(data = ., mapping = aes(x = Time)) + 
+  geom_histogram(aes(fill = after_july2009), color = 'black')
+```
+
+<font size = 4>- (1.2) Loan Purpose (or ListingCategory) </font>
+
+> It is worthwhile mentioning that Prosper has become an important channel for Debt Consolidation: 51% of the loans are borrowed for Debt Consolidation. The top 3 known reasons for the loans are Debt Condolidation, Home Improvement and Business, which in total take up more than 70% of the loans. In fact, the definitions of the categories are vague in my opinion. For example, Large purchases sometimes belongs to Household Improvement, or personal loans. Boat and Auto are also large purchases. Engagement ring can be part of wedding loans, etc. 
+
+``` {r echo = F, eval = T, ListingCategory}
+
+listing_category_list <- 
+  c('Not Available', 'Debt Consolidation', 'Home Improvement',
+    'Business', 'Personal Loan', 'Student Use', 'Auto', 
+    'Other', 'Baby&Adoption', 'Boat', 'Cosmetic Procedure',
+    'Engagement Ring', 'Green Loans', 'Household Expenses',
+    'Large Purchases', 'Medical/Dental', 'Motorcycle', 'RV', 'Taxes',
+    'Vacation', 'Wedding Loans')
+
+df2 %>%
+  plyr::ddply('ListingCategory..numeric.', 
+              function(df) {count = dim(df)[1]}) %>%
+  plyr::arrange(.,V1) %>%
+  dplyr::mutate(., ListingCategory..numeric. = ListingCategory..numeric.+1) %>%
+  dplyr::mutate(., Listing_Category = 
+                  factor(ListingCategory..numeric.,
+                         levels = .$ListingCategory..numeric.,
+                         labels = listing_category_list[.$ListingCategory..numeric.])) %>%
+  ggplot(., mapping = aes(x = Listing_Category,
+                          y = V1)) + 
+  geom_bar(stat = 'identity', fill = 'lightblue', color = 'black') + 
+  geom_text(aes(label = V1, y = V1), hjust =0.5, size = 3) + 
+  ylab(label = 'Count') + coord_flip()
+```
+
+<font size = 4>- (1.3) Loan Status </font>
+
+> Among all the loans, around 38000 are complete, around 56000 are current and 19000 are either past due or charged off. That is to say, 1 out of every 4 ongoing loans is problematic.
+
+```{r echo = F, eval=T, LoanStatus}
+ggplot(data = df2, aes(x = factor(LoanStatus,
+                                  levels = sort(unique(df2$LoanStatus))[c(3,4,6,7,9:12,8,5,2,1)]))) +
+  geom_bar(fill = 'lightblue', color = 'orange') + 
+  theme(
+    axis.text.x=element_text(angle=90, size=10),
+    axis.title.x=element_text(angle=00, size = 10),
+    axis.title.y=element_text(angle=90, color='blue', face='bold', size=12)
+  ) + xlab(label = 'LoanStatus') + ylab(label = 'Count') + 
+  geom_text(aes(label = ..count.., y= ..count..), 
+            stat= "count", vjust = .5, size = 4) + coord_flip()
+```
+
+<font size = 4>- (1.4) Loan original amount, and percent funded</font>
+
+> 99.23% of the loans are 100 percent funded. It appears that the amounts people prefer to borrow are multiples of 5000, such as 5000, 10000, 15000, 20000, etc.
+
+```{r echo = F, eval=T, Loan_Amount}
+df2 %>%
+  ggplot(data=., mapping =aes(x= LoanOriginalAmount)) +
+  geom_histogram(fill ='lightblue', color ='black', binwidth = 1000) +
+  ylab(label = 'Count')
+```
+
+> If we draw the histogram of those loans that are not 100 percent funded,  the distribution appears uniform, except for some peak points at the lower bound which is 0.7.
+
+```{r echo = F, eval=T, Percent_Funded}
+ggplot(data = subset(df2, PercentFunded != 1), aes(x = PercentFunded)) +
+  geom_histogram(fill = 'lightblue', color = 'black', binwidth = 0.002) + 
+  theme(
+    axis.text.x=element_text(angle=90, size=10),
+    axis.title.x=element_text(angle=00, color='red', size = 10),
+    axis.title.y=element_text(angle=90, color='blue', face='bold', size=12)
+  )
+```
+
+<font size = 4> - (1.5) Investors </font>
+
+> About 24% of the loans only have one investor. 
+
+``` {r echo = F, eval = T, Investors}
+df2 %>%
+  ggplot(data =., mapping = aes(x=Investors)) +
+  geom_histogram(binwidth = 10, fill = 'lightblue', color ='black')
+```
+
+> Looking into the distribution of loan investment per investor, we can observe a lot of peaks, for example, at 4000, 10000, 15000, 20000, 25000. This seems to suggest that these investors were very sure about the return of the loan, and did allow other investors to share the potential returns.
+
+``` {r echo = F, eval = T, Investment_per_Investors}
+df2 %>%
+  subset(x=.,Investors == 1) %>%
+  ggplot(data =., mapping = aes(x=LoanOriginalAmount/Investors)) +
+  geom_histogram(fill = 'lightblue', color = 'black', binwidth = 50)
+```
+
+<font size = 4> - (1.6) Lender Yield, Estimated Return & Borrower Interest Rate </font>
+
+> The borrower rate measures the borrowers' cost of borrowing. With a mean of 0.193 and a median of 0.184, this is a quite heavy burden for the borrowers in my opinion. 
+
+``` {r echo = F, eval = T, BorrowerRate}
+p0 <- ggplot(data = df2) + 
+  geom_boxplot(mapping = aes(y = df2$BorrowerRate), 
+               fill = 'lightblue', color = 'black') + coord_flip() + 
+  theme(axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(), axis.title.x = element_blank())
+
+p <- ggplot(data = df2, mapping = aes(x = df2$BorrowerRate)) + 
+  geom_histogram(position = 'dodge', 
+                 fill = 'lightblue', color = 'black') + 
+  xlab(label = 'BorrowerRate')
+
+ggpubr::ggarrange(p0, p, 
+                  ncol = 1, nrow = 2, 
+                  heights = c(1, 4),align = 'v')
+```
+
+> Lender Yield measures nominal return for the investors, while Estimated Return measures the effective return for the investors. The effective Return is only avaiable after July 2009. So we should compare these two variables within the same time interval. From the graph, we could observe that estimated return and lender yield differ to a great extent. The distribution of estimated return is more contrentrated with a lower mean, median, and standard deviation; while the lender yield appears to be more dispersed with a higher mean and median. This suggests that most of the expected loans (higher than 0.15) can no longer ensure regular repayments, and 0.15 is roughly the median of the lender yied, the ex ante return for the investors.
+
+``` {r echo = F, eval = T, LenderYield}
+df2 %>%
+  subset(x=., !is.na(EstimatedReturn)) %>%
+  ggplot(data = ., mapping = aes(x = EstimatedReturn)) + 
+  geom_histogram(position = 'dodge', 
+                 fill = 'green', color = 'black', 
+                 alpha = 0.4) +
+  geom_histogram(aes(x=LenderYield),
+                 position = 'dodge', 
+                 fill = 'grey', alpha = 0.8, color = 'black') +
+  scale_x_continuous(breaks = seq(-0.2, 0.3,0.05)) + 
+  xlab(label = 'Grey for LenderYield, Green for EstiamtedReturn')
+```
+
+> There is an additional problem. In the description, it is writen that `Estimated Return = Estimated Effective Yield - Estimated Loss`. However, the estimated return is always greater than the difference between yield and loss.
+
+``` {r echo = F, eval = T, EstimatedReturn_diff}
+diff_return <- df2 %>%
+  subset(x = ., abs(EstimatedEffectiveYield-EstimatedLoss - EstimatedReturn)>0.0001) %>%
+  dplyr::mutate(.data=., 
+                diff = EstimatedEffectiveYield-EstimatedLoss - 
+                  EstimatedReturn) %>%
+  .$diff 
+
+diff_return %>%
+  list(summary = summary(.), 
+       nb_of_observations = length(.),
+       quantile = quantile(x = ., probs = seq(0,1,0.1), 
+                           na.rm=TRUE, type = 3))
+```
+
+> From the graph, we can notice that the distribution of the Yield-Loss difference is to the left of the Estimated return.
+
+``` {r echo = F, eval = T, EstimatedReturn_Yield_Loss}
+df2 %>%
+  subset(x=., !is.na(EstimatedEffectiveYield - EstimatedLoss)) %>%
+  ggplot(data = ., mapping = aes(x = EstimatedEffectiveYield - EstimatedLoss)) + 
+  geom_histogram(position = 'dodge', 
+                 fill = 'red', color = 'black', 
+                 alpha = 0.4) +
+  geom_histogram(aes(x=EstimatedReturn),
+                 position = 'dodge', 
+                 fill = 'green', alpha = 0.3, color = 'black')+ 
+  xlab(label = 'Red for Yield-Loss, Green for EstiamtedReturn')
+```
+
+<font size = 4> - (1.7) Other Loan Information </font>
+
+> Only 3.8% of loans receive recommendations. 1.9% of the loans receive investment from friends.
+
+``` {r echo = T, eval = T, Term_Recommendation}
+# LOAN TERM
+summary(factor(df2$Term))
+
+# RECOMMENDATIONS
+df2 %>%
+  subset(x=.,Recommendations>0) %>%
+  nrow(.)/nrow(df2)
+```
+
+> Following is a graph of average investment from friends, with binwidth set at 25 and outliers elimianted. We notice that, at the multiples of 50, e.g. 50, 100, 200, 500, 1000, the counts are usually higher, showing that investments from friends usually appear more generous.
+
+``` {r echo = T, eval = T, InvestmentByFriends}
+
+# Percent invested by friends
+df2 %>%
+  subset(x=.,InvestmentFromFriendsCount>0) %>%
+  nrow(.)/nrow(df2)
+
+# Investment Per investor.
+df2 %>%
+  subset(x = ., InvestmentFromFriendsCount > 0) %>%
+  dplyr::mutate(AvgInvFromFriends = 
+                  .$InvestmentFromFriendsAmount/.$InvestmentFromFriendsCount) %>%
+  subset(x = ., 
+         AvgInvFromFriends < 
+           quantile(.$AvgInvFromFriends,0.75) + 1.5 * IQR(x = .$AvgInvFromFriends)) %>%
+  ggplot(data = ., 
+         mapping = aes(x = AvgInvFromFriends)) + 
+  geom_histogram(binwidth = 25, fill = 'lightblue', color = 'orange')
+```
+
+
+### (2) Borrower Information
+
+<font size = 5> - (2.1) Evaluation of borrower's creditworthiness. </font>
+
+>Now we turn our focus to borrowers. We have four variables for the evaluation of borrower's creditibility.
+
+- CreditRating: applicable for listings before July 2009
+- ProsperRating: for listings after July 2009
+- ProsperScore: a custom risk score by prosper, after July 2009
+- CreditScoreRangeLower/CreditScoreRangeUpper: a score given by consumer credit agency
+
+<font size = 4> - (2.1.1) ProsperRating and CreditGrade. </font>
+
+> We notice that ProsperRatings did not exist before July 2009, while CreditGrade rating system did not exist after July 2009. However, these two are not complementary, since the classifications of credit levels are different. 
+
+``` {r echo = F, eval = T, ProsperRating_CreditGrade}
+p0 <- df2 %>%
+  dplyr::mutate(.data = ., 
+                Time = as.Date(x = substr(x = .$LoanOriginationDate,
+                                           start = 1, stop = 10), 
+                                format = '%Y-%m-%d'),
+                Prosper_Rating = factor(ProsperRating..Alpha.,
+                                        levels = c('AA',
+                                                   LETTERS[c(1:5)],'HR'))) %>%
+  dplyr::mutate(.data = .,
+                beafjuly2009 = 
+                  ifelse(.$Time > as.Date('2009-07-01'),
+                         yes = TRUE, no = FALSE)) %>%
+  ggplot(data = ., mapping = aes(x = Time)) + 
+  geom_histogram(aes(fill = Prosper_Rating)) #+ scale_fill_brewer(palette="")
+
+p <- df2 %>%
+  dplyr::mutate(.data = ., 
+                Time = as.Date(x = substr(x = .$LoanOriginationDate,
+                                           start = 1, stop = 10), 
+                                format = '%Y-%m-%d')) %>%
+  dplyr::mutate(.data = .,
+                beafjuly2009 = 
+                  ifelse(.$Time > as.Date('2009-07-01'),
+                         yes = TRUE, no = FALSE),
+                Credit_Grade = factor(CreditGrade,
+                                      levels = c('AA', LETTERS[c(1:5)], 'HR', 'NC'))) %>%
+  ggplot(data = ., mapping = aes(x = Time)) + 
+  geom_histogram(aes(fill = Credit_Grade))
+
+
+gridExtra::grid.arrange(p0,p)
+
+```
+
+<font size = 4> - (2.1.2) CreditScoreRangeLower </font>
+
+> The distribution of credit score range lower bound seems symmetric. Median Credit score range for borrowers is 680.0 ~ 699.0, which is close to the Mean Credit Score Range 685.5 ~ 704.5. Borrowers whose credit score range is inferior to 560 ~ 579, or superior to 800 ~ 819 are considered as outliers. Around 7% of observations are outliers, and a considerable amount of outliers appear at left tail. These could lead to bias in the mean. 
+
+``` {r echo = F, eval = T, CreditScoreRangeLower}
+
+is_outlier <- function(x) {
+  return(x < quantile(x, probs = 0.25, na.rm = TRUE) - 
+           1.5 * IQR(x = x, na.rm=TRUE) | 
+           x > quantile(x, probs = 0.75, na.rm = TRUE) + 
+           1.5 * IQR(x = x, na.rm=TRUE))
+}
+
+
+p <- ggplot(data = df2, mapping = aes(x = CreditScoreRangeLower)) + 
+  geom_histogram(binwidth = 10, fill = 'lightblue', color = 'orange')
+
+p0 <- 
+  df2 %>%
+  mutate(outlier = ifelse(is_outlier(df2$CreditScoreRangeLower),
+                          df2$CreditScoreRangeLower, as.numeric(NA))) %>%
+  ggplot(., aes(y = df2$CreditScoreRangeLower)) + 
+  geom_boxplot(fill = 'lightblue', color = 'black') + coord_flip() +
+  theme(axis.text.y = element_blank(),
+        axis.ticks.y = element_blank()) + ylab(label = 'CreditScoreRangeLower')
+
+ggpubr::ggarrange(p0, p, nrow = 2, ncol = 1, heights = c(1,4),
+                  align = 'v')
+
+```
+
+<font size = 4> - (2.1.3) ProsperRating / ProsperScore </font>
+
+> The prosper credit ratings range from AA (Best) to HR (Worst). Most of the borrowers are rated C. From the graph, we notice that, the distributions of the Prosper Rating and Prosper Score are both roughly inverse-U shaped.
+
+``` {r echo = F, eval = T, ProsperRating_ProsperScore}
+p <- ggplot(data = df2, 
+            mapping = 
+              aes(x = factor(df2$ProsperRating..Alpha.,
+                             levels = c('AA', LETTERS[c(1:5)], 'HR')))) +
+  geom_bar(fill = 'lightblue', color = 'red') +
+  geom_text(aes(label = ..count.., y= ..count..), 
+            stat= "count", vjust = 0, size = 4) + 
+  xlab('ProsperRating')
+
+p2 <- ggplot(data = df2, 
+             mapping = 
+               aes(x = factor(ProsperScore))) +
+  geom_bar(fill = 'lightblue', color = 'red') +
+  geom_text(aes(label = ..count.., y= ..count..), 
+            stat= "count", vjust = 0, size = 4) +
+  xlab('ProsperScore')
+
+gridExtra::grid.arrange(p,p2)
+
+```
+
+<font size = 5> - (2.2) Occupations / Employment </font>
+
+> The variable Occupation yields some interesting results. In China, Computer programmers are known to earn good amount of money and spend few. Teachers, clericals, administrative assitants and sales persons usually have low salaries, this is reasonable. Executives, Accountants and CPAs usually have good education background, it is possible that they borrow because they have better financial knowledge in managing personal portfolio, not because they are financially constrained.
+
+``` {r echo = F, eval = T, Occupation}
+
+df2 %>% 
+  plyr::ddply(.data = ., .variables = 'Occupation', nrow) %>%
+  plyr::arrange(df = ., V1) %>%
+  dplyr::mutate(.data = ., Occupation = factor(Occupation, 
+                                               levels = .$Occupation)) %>%
+  subset(., !is.na(Occupation)) %>%
+  tail(.,10) %>%
+  ggplot(data = ., 
+         mapping = aes(x = Occupation, y = V1)) + 
+  geom_bar(stat= 'identity', 
+           fill = 'lightblue', color = 'orange') + 
+  geom_text(aes(label = V1, y=V1))+ ylab(label = 'Count') +
+  coord_flip()
+
+```
+
+> The variable EmploymentStatus confirms that stable employment is an important factor for the approval of the loan.
+
+``` {r echo = F, eval = T, EmploymentStatus}
+
+df2 %>%
+  plyr::ddply(.data = ., .variables = 'EmploymentStatus', nrow) %>%
+  plyr::arrange(df = ., V1) %>%
+  dplyr::mutate(.data = ., 
+                EmploymentStatus = factor(EmploymentStatus,
+                                          levels = .$EmploymentStatus)) %>%
+  ggplot(data = ., 
+         mapping = aes(x = EmploymentStatus, y = V1)) + 
+  geom_bar(stat= 'identity', fill = 'lightblue', color = 'orange') + 
+  geom_text(aes(label = V1, y = V1)) + ylab(label = 'Count')+
+  coord_flip()
+
+```
+
+<font size = 5>- (2.3) Income, Debt To Income Ratio, and Monthly Loan To Income Ratio </font>
+
+> I checked that the variable Income Range is obtained from the variable Stated Monthly Income multiplied by 12. The number of borrowers with yearly income greater than 10,0000 takes up 15.20% of the whole data, this figure is higher than what I expected.
+
+``` {r echo = F, eval = T, IncomeRange}
+
+df2 %>%
+  ggplot(data = ., 
+         mapping= aes( x= factor(IncomeRange, 
+                              levels = c(sort(unique(df2$IncomeRange))[1],
+                                         sort(unique(df2$IncomeRange))[3:6],
+                                         sort(unique(df2$IncomeRange))[2],
+                                         sort(unique(df2$IncomeRange))[7:8])))) +
+  geom_histogram(stat = 'count', fill = 'lightblue', 
+                 color = 'black', alpha = 0.5) + 
+  geom_text(aes(label = ..count.., y=..count..), stat = 'count') + 
+  xlab(label = 'Income Cagetories') +
+  coord_flip()
+
+```
+
+> The variable `MonthlyLoanPayment/StatedMonthlyIncome` is created to measure the debt burden from Prosper Loan, The concept is similar to that of Debt to Income Ratio. This is a right-skewed distribution, with mean 0.055, median 0.049, and standard deviation 0.032.
+
+``` {r echo = F, eval = T, MonthlyLoanToIncomeRatio}
+
+df2 %>%
+  subset(x=., !is_outlier(StatedMonthlyIncome) &
+           !is_outlier(MonthlyLoanPayment/StatedMonthlyIncome)) %>%
+  ggplot(data=., mapping = aes(x = MonthlyLoanPayment/StatedMonthlyIncome)) + 
+  stat_bin(stat='count', geom='bar',
+           fill='lightblue', color = 'black', size=0.3,alpha = 0.7)
+
+```
+
+> It is also worthwhile noticing that the DebtToIncomeRatio has a similar shape of distribution with the MonthlyLoanPayment/StatedMonthlyIncome variable which we created, regardless of the magnitudes.
+
+``` {r echo = F, eval = T, DebtToIncomeRatio}
+df2 %>%
+  subset(x=., !is_outlier(DebtToIncomeRatio))%>%
+  ggplot(data = ., mapping = aes(x=DebtToIncomeRatio)) + 
+  geom_histogram(binwidth = 0.03, fill = 'lightblue', 
+                 color='black', size = 0.4, alpha = 0.3)
+```
+
+
+<font size = 5>- (2.4) Credit History </font>
+
+<font size = 4>- (2.4.1) Percent of trades delinquent </font>
+
+> Around 40% of the borrowers have never been delinquent.
+
+```{r echo = F, eval=T, NeverDelinquent}
+df2 %>%
+  ggplot(data = ., mapping = aes(x = .$TradesNeverDelinquent..percentage.)) +
+  stat_bin(binwidth = 0.025, fill='lightblue', color = 'black', size = 0.2)
+```
+
+<font size = 4> - (2.4.2) Number of delinquencies per credit line, 7 years before the credit profile was pulled. (created) </font>
+
+> 67% of the borrowers have never been delinquent during the past 7 years. I am surprised to see that this number is much greater than the 40% noted above.
+
+```{r echo = F, eval = T, Del_past_7_years}
+df2 %>%
+  ggplot(data = ., 
+         mapping = aes(x = DelinquenciesLast7Years/TotalCreditLinespast7years)) +
+  geom_histogram(fill='lightblue', color = 'orange', size = 0.1, 
+                 binwidth = 0.2)
+
+quantile(x = df2$DelinquenciesLast7Years/df2$TotalCreditLinespast7years, 
+         probs = seq(0,1,0.05),
+         na.rm=TRUE, type = 3)
+```
+
+<font size = 4> - (2.4.3) Bank card utilization </font>
+
+> It is odd to see that 7% of borrowers never used their bank credit. There are people who even used more than 100% of their credit. 
+
+```{r echo = F, eval = T, BankCard}
+df2 %>%
+  ggplot(data = ., 
+         mapping = aes(x = BankcardUtilization)) +
+  geom_histogram(binwidth = 0.1,
+                 fill='lightblue', color = 'orange', size = 0.3)
+
+quantile(x = df2$BankcardUtilization, 
+         probs = seq(0,1,0.1),
+         na.rm=TRUE, type = 3)
+```
+
+<font size = 5> - (2.5) Other Borrower side information. </font>
+
+<font size = 4> - (2.5.1) Homeowner </font>
+
+> Slightly more than half of the individuals own a house.
+
+``` {r echo = F, eval = T, HomeOwner}
+summary(factor(df2$IsBorrowerHomeowner)) # HOMEOWNER?
+```
+
+<font size = 4> - (2.5.2) In Group </font>
+
+> Only around 10% of borrowers joined a group. It is well known that being in a group can enhance the chance of getting a loan, because group admission is a barrier which normally gives a positive signal that the borrower is selected. Hence, this figure appears too low in my opinion. Is there a indeed strict barrier for entering into a group?
+
+``` {r echo = F, eval = T, InGroup}
+summary(factor(df2$CurrentlyInGroup))
+```
+
+# Univariate Analysis
+
+### What is the structure of your dataset?
+
+> After cleaning, the dataset had 113066 observations with 81 variables/columns. Many variables appear to have a considerable amount of missing values.
+
+### What is/are the main feature(s) of interest in your dataset?
+
+> I am interested in the following aspects.
+1. What are the determinants of Borrower rate? (Borrower rate measures the cost of borrowers)
+2. What are the determinants of Propser Rating?
+3. Which loan do the investors prefer?
+4. What are the determinants of Estimated Return? (Estimated return measures return for the investors.)
+
+### What other features in the dataset do you think will help support your investigation into your feature(s) of interest?
+
+> I will use the borrowers' past credit history and their credit behaviors to study the default behaviors. In addition to the variables that evidently have important impacts, I discovered that the variables `CurrentlyInGroup`, `TotalInquiries`, and `BankCardUtilization` have also crucial impacts on the explanation of the unexpected default.
+
+### Did you create any new variables from existing variables in the dataset?
+
+> I created the following variables which are quite straightforward:
+
+`Average Investment From Friends = InvestmentFromFriendsAmount/InvestmentFromFriendsCount`
+
+`ProsperLoanToIncomeRatio = 
+MonthlyLoanPayment/StatedMonthlyIncome`
+
+`Delinquencies per credit lines in the past 7 years= DelinquenciesLast7Years/TotalCreditLinespast7years`
+
+### Of the features you investigated, were there any unusual distributions? Did you perform any operations on the data to tidy, adjust, or change the form of the data? If so, why did you do this?
+
+> I find that `Estimated Return` is not equal to the difference between the `Estimated Effective Yield` and `Estimated Loss`, which relation was supposed to be true according to the data description. The definition of the variables Employment Status, and Loan Status are vague.
+
+> There are several other unusual features in the dataset. For example, some borrowers who entered '$0' as their income, and some borrowers claimed that their verifiable month income is greater than '$100000'. At the same time, some borrowers' credit score is lower than 20. In addition, the `ListingKey` is not unique for some observations. Also, there are a considerable amount of missing values. What I did is to remove dupliate observations, ignore missing values, identify and ignore unusual outliers, and comment on the data inconsistencies. 
+
+To be continued
