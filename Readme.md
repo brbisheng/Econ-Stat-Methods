@@ -3,8 +3,9 @@
 Recently, I started a (long-term) freelance project: Algorithms from scratch. This page is dedicated to implement statistical/econometric methods from scratch. You could also find implementation of machine learning methods [here](https://brbisheng.github.io/algorithms/).
 
 Warmups: (forthcoming)
-1. Keywords: Nonparametric regression
-    - Part1: 
+1. Keywords: Nonparametric (Np) regression
+    - comments: kNN, kernel methods, regulation, many things are related to Np regression.
+    
 
 Academic Papers:
 
