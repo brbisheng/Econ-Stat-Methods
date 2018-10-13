@@ -5,7 +5,7 @@
 - Keywords: Univariate, local averaging
   - Partitioning estimate
 
-sum_(i=1)^n i^3=((n(n+1))/2)^2
+`sum_(i=1)^n i^3=((n(n+1))/2)^2`
 
 
 ### Terminlogies
