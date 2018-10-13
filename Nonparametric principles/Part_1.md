@@ -1,9 +1,11 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=AM_CHTML"></script>
+
 ### Preassumptions 
 
 - Keywords: Univariate, local averaging
+  - Partitioning estimate
 
-ζ
-
+sum_(i=1)^n i^3=((n(n+1))/2)^2
 
 
 ### Terminlogies
