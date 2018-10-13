@@ -2,6 +2,10 @@
 
 Recently, I started a (long-term) freelance project: Algorithms from scratch. This page is dedicated to implement statistical/econometric methods from scratch. You could also find implementation of machine learning methods [here](https://brbisheng.github.io/algorithms/).
 
+Warmups: (forthcoming)
+1. Keywords: Nonparametric regression
+    - Part1: 
+
 Academic Papers:
 
 1. Keywords of First Topic: `Nonparametric`, `seemingly unrelated regression (or SUR)` 
