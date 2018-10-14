@@ -97,7 +97,11 @@
 
 </div> <!-- crude estimator div finished. -->
 
-  
+<br>
+<br> 
+<br>
+<br> 
+
 <div id = 'Naive Estimator'>
 Naive Estimator. (Ref. [1])
 <br>
@@ -109,14 +113,16 @@ and the density estimator becomes
 `\hat{f(x)}=\frac{1}{nh}\sum_{i=1}^{n}\frac{1}{2}\times 1\{|\frac{x_{i}-x}{h}|\leq1\}`</center>
 <br>
 We now introduce the definition of kernel
-<center>`k(\psi)=\begin{cases}
-1/2 & \psi\leq1\\
-0 & \psi>1
-\end{cases}` where `\psi=|\frac{x_{i}-x}{h}|`</center>
+<center>`k(\psi)={(1/2, \psi\leq1),(0, \psi>1):}`</center>
 <br>
 and write our estimator as 
 <center>`\hat{f}(x)=\frac{1}{nh}\sum_{i=1}^{n}k(\psi)`</center>
-
+  <div class = 'mycode'>
+    <code>
+      
+    </code>
+  </div>
+  
 </div> <!-- naive estimator div finished. -->
 <br>
   
@@ -142,4 +148,8 @@ four paradigms of nonparametric regression: (1) local averaging,(2) local modeli
 </body>
 
 
-<div>Math from http://asciimath.org/</div>
+<div>
+  1. Math from http://asciimath.org/
+  <br>
+  2. Syntax of `asciimath` from https://runarberg.github.io/ascii2mathml/ 
+</div>
