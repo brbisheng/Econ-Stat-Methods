@@ -18,14 +18,22 @@
   <br>
   2. Number of observations is `n`, Number of patitions is `J`, each of length `h=(b-a)/J`. (Assumption: partitions identical)
   <br>
-  Then, Crude estimator is `\hat{f_{j}}=\frac{n_{j}}{nh}`, fraction of 
+  Then, Crude estimator is `\hat{f_{j}}=\frac{n_{j}}{nh}`, where `n_{j}` denote number of observations appearing in interval `j`.
+  <br>
+  <code>
+    
+    cut(x = udeE$temp1, breaks = udeE$J) %>% length
+
+    udeE$temp1 <- seq(from = udeE$a, to = udeE$b, length.out = udeE$J)
+  </code>
 </div>
 
 <div class = 'references'>
-  References:
+  References Books:
   <br>
   [1]. Applied Nonparametric Econometrics 
-  
+  References Sites:
+  ]1[. <a href = 'https://www.datacamp.com/community/tutorials/functions-in-r-a-tutorial'>Anonymous functions</a> 
 </div>
   
 <div class = 'terminlogies'>
