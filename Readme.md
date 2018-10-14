@@ -1,7 +1,7 @@
 ***
 Forewords:
 
-1. Recently, I started a **(long-term)** freelance project: Algorithms from scratch. This page is dedicated to implement statistical/econometric methods from scratch. You could also find implementation of machine learning methods [here](https://brbisheng.github.io/algorithms/).
+1. Recently, I started a **(long-term)** freelance project: Algorithms from scratch. This page is dedicated to implementing statistical/econometric methods from scratch. You could also find implementation of machine learning methods [here](https://brbisheng.github.io/algorithms/).
 
 2. So what I do is to transform all my understandings of the statistical/econometric methods from **academic papers** and **text books** to code. Why? Many of the papers do not provide code, but just give algorithmes. 20% of the time, when I try to implement their methods by myself, I often find mistakes. So, let us just do it from scratch for the sake of better understanding them and inventing our own methods.
 
