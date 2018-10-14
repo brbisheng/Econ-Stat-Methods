@@ -10,7 +10,9 @@ Forewords:
 > Update 10/14/2018: I am updating the sites from .markdown to .html, so many parts are unorganized for this moment, I will try to fix the issues as soon as I could.
 
 Warmups: (forthcoming)
-1. Keywords: Nonparametric (Np) regression
+1. Keywords: Nonparametric (Np) Statistics
+    - [Univariate Density Estimation](https://htmlpreview.github.io/?https://github.com/brbisheng/Econ-Stat-Methods/blob/master/Nonparametric%20principles/Part_1.html)
+2. Keywords: Nonparametric (Np) regression
     - comments: kNN, kernel methods, regulation, many things are related to Np regression.
     
 
