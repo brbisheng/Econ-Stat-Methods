@@ -19,7 +19,7 @@
 <body>
 
 <div id = 'crude_estimator'>
-  Crude Estimator. (Ref. [1])
+  <h1>Crude Estimator. (Ref. [1])</h1>
   <br>
   1. Estimation
   <br>
@@ -103,7 +103,7 @@
 <br> 
 
 <div id = 'Naive Estimator'>
-Naive Estimator. (Ref. [1])
+<h1>Naive Estimator. (Ref. [1]) </h1>
 <br>
 `n` observations. For each `i\in\{ 1,..,n\}`, we place the bin centerred at each observation `x_{i}`. Then the number of observations that are within of the bin containing our point of interest is
 <br>
@@ -119,9 +119,33 @@ and write our estimator as
 <center>  `\hat{f(x)}=\frac{1}{n}\sum_{i=1}^{n}\frac{1}{h}\times K(\frac{x_{i}-x}{h})` </center>
   <div class = 'mycode'>
     <code>
-      
+      ## Choose the value of h yourself
+      p$h <- 0.0000001
+
+      ## A data.frame to save the resulting estimated density for each data point
+      p$naive <- data.frame(x = p$x, estimate = NA)
+
+      ## Kernel function
+      p$kn1 <- function(x,xi,h){
+        value <- ifelse((x-xi)/h > -1 & (x-xi)/h <= 1, 
+                        yes = 1/2, no = 0)
+        return(value)
+      } 
+
+      ## Derive result
+      for ( row in 1:nrow(p$naive)) {
+        p$naive[row, 'estimate'] <- 
+          p$kn1(x = p$naive[row, 'x'],
+                xi = p$x,
+                h = p$h) %>% sum %>%
+          (function(x) {x/(p$n * p$h)})
+      } 
+
+      ## Verify
+      p$naive$estimate %>% sum
+
     </code>
-  </div>
+  </div> <!--Mycode div finished-->
   
 </div> <!-- naive estimator div finished. -->
 <br>
