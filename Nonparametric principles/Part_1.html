@@ -18,7 +18,7 @@
 
 <body>
 
-<div>
+<div id = 'crude_estimator'>
   Crude Estimator. (Ref. [1])
   <br>
   1. Estimation
@@ -49,7 +49,7 @@
     
     ### Number of partitions, J be not greater than the number of observations.
     p$J <- 500 
-    p$h <- (p$b - p$a)/p$J # bandwidth
+    p$h <- (p$b - p$a)/p$J # binwidth
     
     ### Note: Here we have an assumption: interval is of identical length, (could be relaxed)
     
@@ -76,10 +76,37 @@
     2. This method is dependent upon the `J` we choose.
     <br>
   </div>
+  <br>
+  <br>
+  <br>
+  
+  <div>
   2. Bias-Variance Trade-off
+    <br>
+    Bias is the difference between estimated and observed value, increasing in binwidth `h`
+    <br>
+    Variance of the estimator `\hat{f_{j}}=\frac{n_{j}}{nh}` follows binomial distribution, is decreasing in binwidth `h`.
+    <br>
+    There exists an `h^{*}` such that the Bias and Variance trade-off is MINIMIZED.
+    <br>
+    Final Remarks: Both Bias and Variance decrease when `n` increases.
     
+    If we require that `nh \rightarrow 0` and `h \rightarrow 0`, both Bias and Variance decrease, suggesting that this crude estimator converges in the mean square error sense. As the sample size increases (`n` increases), we get more information about the sample, we can then further partition the interval, which in turn decreases the binwidth, lowers bias. At the same time, we cannot lower `h` so that it offsets the gains in information that we obtain, thus `h/n \rightarrow0`. 
+   <br>
+    In this crude approximation, we start from partition of intervals to construct the bins. We now consider several focus points, around which we construct the bins. This estimator is known as the naïve density estimator or a centered histogram.
 </div>
 
+</div> <!-- crude estimator div finished. -->
+
+  
+<div id = 'Naive Estimator'>
+Naive Estimator. (Ref. [1])
+
+  
+</div>
+<br>
+  
+  
 <div class = 'references'>
   References Books:
   <br>
