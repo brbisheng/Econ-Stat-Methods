@@ -13,23 +13,56 @@
 
 <body>
 
-### Preassumptions 
 <div>
   Crude Estimator. (Ref. [1])
   <br>
-  1. Data from interval `\left[a,b\right]`
+  1. Estimation
   <br>
-  2. Number of observations is `n`, Number of patitions is `J`, each of length `h=(b-a)/J`. (Assumption: partitions identical)
+  - Data from interval `\left[a,b\right]`
+  <br>
+  - Number of observations is `n`, Number of patitions is `J`, each of length `h=(b-a)/J`. (Assumption: partitions identical)
   <br>
   Then, Crude estimator is `\hat{f_{j}}=\frac{n_{j}}{nh}`, where `n_{j}` denote number of observations appearing in interval `j`.
   <br>
   <code>
     
-    cut(x = udeE$temp1, breaks = udeE$J) %>% length
+    library(ggplot2)
+    library(magrittr) ## to use pipe operator
+
+    ### Create parameter environment
+
+    p <- new.env()
+
+    ### Number of observations.
+    p$n <- 2000
+
+    ### Univariate x.
+    p$a <- 0  # lower bound
+    p$b <- 20  # upper bound.. Our x belongs to the interval (0,2). a = 0, b = 2
+    p$x <- runif(n=p$n, min = p$a, max= p$b)
     
-    udeE$temp1 <- seq(from = udeE$a, to = udeE$b, length.out = udeE$J)
+    ### Number of partitions, J be not greater than the number of observations.
+    p$J <- 500 
+    p$h <- (p$b - p$a)/p$J # bandwidth
+    
+    ### Note: Here we have an assumption: interval is of identical length, (could be relaxed)
+    
+    ## Lower and upper bounds for each Interval
+    p$lub <- seq(from = p$a, to = p$b, length.out = p$J)
+    
+    ## the category each observation belongs to
+    p$obscat <- findInterval(x = p$x, vec = p$lub) %>% table %>% 
+      (function(x) {x/(p$n * p$h)})
+    
+    ggplot(data =NULL, mapping= aes(x=as.integer(names(p$obscat))* p$h,
+                                    y=as.vector(p$obscat))) +
+      geom_bar(stat = 'identity') +
+      geom_density(mapping = aes(x=p$x), inherit.aes = FALSE)
     
   </code>
+    
+  2. Bias-Variance Trade-off
+    
 </div>
 
 <div class = 'references'>
