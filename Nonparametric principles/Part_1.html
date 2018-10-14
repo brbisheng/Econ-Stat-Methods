@@ -6,6 +6,11 @@
       background-color: powderblue;
       white-space: pre;
     }
+    .code{
+      margin: 20px 0px 100px 10px;
+      background-color: powderblue;
+      width: 60%;
+    }
   </style>
 </head>
 
@@ -24,6 +29,7 @@
   <br>
   Then, Crude estimator is `\hat{f_{j}}=\frac{n_{j}}{nh}`, where `n_{j}` denote number of observations appearing in interval `j`.
   <br>
+  <div class = 'mycode'>
   <code>
     
     library(ggplot2)
@@ -60,7 +66,8 @@
       geom_density(mapping = aes(x=p$x), inherit.aes = FALSE)
     
   </code>
-    
+  </div>
+  <br>
   2. Bias-Variance Trade-off
     
 </div>
