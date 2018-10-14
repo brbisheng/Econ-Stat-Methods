@@ -105,7 +105,7 @@
 <div id = 'Naive Estimator'>
 Naive Estimator. (Ref. [1])
 <br>
-`n` observations. For each `i\in\left\{ 1,..,n\right\}`, we place the bin centerred at each observation `x_{i}`. Then the number of observations that are within of the bin containing our point of interest is
+`n` observations. For each `i\in\{ 1,..,n\}`, we place the bin centerred at each observation `x_{i}`. Then the number of observations that are within of the bin containing our point of interest is
 <br>
 <center> `n_{x_{i}}=\sum_{i=1}^{n}1\{ x_{i}-h\leq x\leq x_{i}+h\}` </center>
 and the density estimator becomes 
@@ -116,7 +116,7 @@ We now introduce the definition of kernel
 <center>`k(\psi)={(1/2, \psi\leq1),(0, \psi>1):}`</center>
 <br>
 and write our estimator as 
-<center>`\hat{f}(x)=\frac{1}{nh}\sum_{i=1}^{n}k(\psi)`</center>
+<center>  `\hat{f(x)}=\frac{1}{n}\sum_{i=1}^{n}\frac{1}{h}\times K(\frac{x_{i}-x}{h})` </center>
   <div class = 'mycode'>
     <code>
       
