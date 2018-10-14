@@ -106,8 +106,17 @@ Naive Estimator. (Ref. [1])
 <center> `n_{x_{i}}=\sum_{i=1}^{n}1\{ x_{i}-h\leq x\leq x_{i}+h\}` </center>
 and the density estimator becomes 
 <center>
-`\hat{f}=\frac{1}{nh}\sum_{i=1}^{n}\frac{1}{2}\times 1\{|\frac{x_{i}-x}{h}|\leq1\}`</center>
-  
+`\hat{f(x)}=\frac{1}{nh}\sum_{i=1}^{n}\frac{1}{2}\times 1\{|\frac{x_{i}-x}{h}|\leq1\}`</center>
+<br>
+We now introduce the definition of kernel
+<center>`k(\psi)=\begin{cases}
+1/2 & \psi\leq1\\
+0 & \psi>1
+\end{cases}` where `\psi=|\frac{x_{i}-x}{h}|`</center>
+<br>
+and write our estimator as 
+<center>`\hat{f}(x)=\frac{1}{nh}\sum_{i=1}^{n}k(\psi)`</center>
+
 </div> <!-- naive estimator div finished. -->
 <br>
   
