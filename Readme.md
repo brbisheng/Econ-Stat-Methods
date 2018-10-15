@@ -7,11 +7,13 @@ Forewords:
 
 3. This site is still under construction, the structure may vary, but I try to work diligently to make it indeed a **long-term** project and a place useful for people.  
 
-> Update 10/14/2018: I am updating the sites from .markdown to .html, so many parts are unorganized for this moment, I will try to fix the issues as soon as I could.
+> Update 10/16/2018: I am updating the sites from .markdown to .html, so many parts are unorganized for this moment, I will try to fix the issues as soon as I could.
 
 Warmups: (forthcoming)
 1. Keywords: Nonparametric (Np) Statistics
-    - [Univariate Density Estimation](https://htmlpreview.github.io/?https://github.com/brbisheng/Econ-Stat-Methods/blob/master/Nonparametric%20principles/Part_1.html)
+    - Univariate Density Estimation 
+        - [Univariate Density Estimation Part 1](https://htmlpreview.github.io/?https://github.com/brbisheng/Econ-Stat-Methods/blob/master/Nonparametric%20principles/UnivariateDensityEstimation_Part_1.html)
+        - [Univariate Density Estimation Part 2](https://htmlpreview.github.io/?https://github.com/brbisheng/Econ-Stat-Methods/blob/master/Nonparametric%20principles/UnivariateDensityEstimation_Part_2.html)
 2. Keywords: Nonparametric (Np) regression
     - comments: kNN, kernel methods, regulation, many things are related to Np regression.
     
