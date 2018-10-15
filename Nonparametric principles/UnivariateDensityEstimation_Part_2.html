@@ -18,170 +18,44 @@
 
 <body>
 
-<div id = 'crude_estimator'>
-  <h1>Crude Estimator. (Ref. [1])</h1>
-  <br>
-  1. Estimation
-  <br>
-  - Data from interval `\left[a,b\right]`
-  <br>
-  - Number of observations is `n`, Number of patitions is `J`, each of length `h=(b-a)/J`. (Assumption: partitions identical)
-  <br>
-  Then, Crude estimator is `\hat{f_{j}}=\frac{n_{j}}{nh}`, where `n_{j}` denotes the number of observations appearing in interval `j`.
-  <br>
-  <div class = 'mycode'>
-  <code>
-    
-    library(ggplot2)
-    library(magrittr) ## to use pipe operator
-
-    ### Create parameter environment
-
-    p <- new.env()
-
-    ### Number of observations.
-    p$n <- 2000
-
-    ### Univariate x.
-    p$a <- 0  # lower bound
-    p$b <- 20  # upper bound.. Our x belongs to the interval (0,2). a = 0, b = 2
-    p$x <- runif(n=p$n, min = p$a, max= p$b)
-    
-    ### Number of partitions, J be not greater than the number of observations.
-    p$J <- 500 
-    p$h <- (p$b - p$a)/p$J # binwidth
-    
-    ### Note: Here we have an assumption: interval is of identical length, (could be relaxed)
-    
-    ## Lower and upper bounds for each Interval
-    p$lub <- seq(from = p$a, to = p$b, length.out = p$J)
-    
-    ## the category each observation belongs to
-    p$obscat <- findInterval(x = p$x, vec = p$lub) %>% table %>% 
-      (function(x) {x/(p$n * p$h)})
-    
-    ggplot(data =NULL, mapping= aes(x=as.integer(names(p$obscat))* p$h,
-                                    y=as.vector(p$obscat))) +
-      geom_bar(stat = 'identity') +
-      geom_density(mapping = aes(x=p$x), inherit.aes = FALSE)
-    
-  </code>
-  </div>
-  <br>
-  <p>
-  Remarks:
-    <br>
-    1. There are a lot of holes, because the intervals are left-open, right-closed.
-    <br>
-    2. This method is dependent upon the `J` we choose.
-    <br>
-  </p>
-  <br>
-  <br>
-  
-  <div>
-  2. Bias-Variance Trade-off
-    <br>
-    Bias is the difference between estimated and observed value, increasing in binwidth `h`
-    <br>
-    Variance of the estimator `\hat{f_{j}}=\frac{n_{j}}{nh}` follows binomial distribution, is decreasing in binwidth `h`.
-    <br>
-    There exists an `h^{*}` such that the Bias and Variance trade-off is MINIMIZED.
-    <br>
-    Final Remarks: Both Bias and Variance decrease when `n` increases.
-    <br>
-    If we require that `nh \rightarrow 0` and `h \rightarrow 0`, both Bias and Variance decrease, suggesting that this crude estimator converges in the mean square error sense. As the sample size increases (`n` increases), we get more information about the sample, we can then further partition the interval, which in turn decreases the binwidth, lowers bias. At the same time, we cannot lower `h` so that it offsets the gains in information that we obtain, thus `h/n \rightarrow0`. 
-    <br>
-    In this crude approximation, we start from partition of intervals to construct the bins. We now consider several focus points, around which we construct the bins. This estimator is known as the naïve density estimator or a centered histogram.
-  </div> <!-- crude estimator bias-variance div finished. -->
-
-</div> <!-- crude estimator div finished. -->
-
-<br>
-<br> 
-<br>
-<br> 
-
-<div id = 'Naive Estimator'>
-<h1>Naive Estimator. (Ref. [1]) </h1>
-<br>
-`n` observations. For each `i\in\{ 1,..,n\}`, we place the bin centerred at each observation `x_{i}`. Then the number of observations that are within of the bin containing our point of interest is
-<br>
-<center> `n_{x_{i}}=\sum_{i=1}^{n}1\{ x_{i}-h\leq x\leq x_{i}+h\}` </center>
-and the density estimator becomes 
-<center>
-`\hat{f(x)}=\frac{1}{nh}\sum_{i=1}^{n}\frac{1}{2}\times 1\{|\frac{x_{i}-x}{h}|\leq1\}`</center>
-<br>
-We now introduce the definition of kernel
-<center>`k(\psi)={(1/2, \psi\leq1),(0, \psi>1):}`</center>
-<br>
-and write our estimator as 
-<center>  `\hat{f(x)}=\frac{1}{n}\sum_{i=1}^{n}\frac{1}{h}\times K(\frac{x_{i}-x}{h})` </center>
-  <div class = 'mycode'>
-    <code>
-      ## Choose the value of h yourself
-      p$h <- 0.0000001
-
-      ## A data.frame to save the resulting estimated density for each data point
-      p$naive <- data.frame(x = p$x, estimate = NA)
-
-      ## Kernel function
-      p$kn1 <- function(x,xi,h){
-        value <- ifelse((x-xi)/h > -1 & (x-xi)/h <= 1, 
-                        yes = 1/2, no = 0)
-        return(value)
-      } 
-
-      ## Derive result
-      for ( row in 1:nrow(p$naive)) {
-        p$naive[row, 'estimate'] <- 
-          p$kn1(x = p$naive[row, 'x'],
-                xi = p$x,
-                h = p$h) %>% sum %>%
-          (function(x) {x/(p$n * p$h)})
-      } 
-
-      ## Verify
-      p$naive$estimate %>% sum
-
-    </code>
-  </div> <!--Mycode div finished-->
-  
-  <p>
-    <br>
-  Remarks:  What we do is to estimate the density `f(x)` by a several boxcar functions centered at each observation. Each boxcar function is of width `2h`. The tuning parameter is still `h`, and larger values of `h` give smoother estimates.
-    <br>
-  </>
-  
-</div> <!-- naive estimator div finished. -->
-<br>
-
 <div id = 'General Kernel Estimators'>
 <h1>Kernel Estimators. (Ref. [1]) </h1>
 <br>
-  1. Mostly we use symmetric kernels.
-  2. Orders of kernels matter, which is measured by the value of different moments of the kernel.
-  3. For kernels of which the order is greater than 2, we can not interpret them as densities, because they may have negative parts. 
+  <p>In general, a kernel estimator can be written in the following form:</p>
+  <br>
+  <br>
+  <center>
+`\hat{f(x)}=\frac{1}{n}\sum_{i=1}^{n}\frac{1}{h}\times k(\frac{x_{i}-x}{h})`</center>
+  <br>
+  <br>
+  We could use a other choices for kernel function, one is the standard normal kernel:
+  <br>
+  <br>
+  <center>`k(v)=\frac{1}{\sqrt{2\pi}}e^{-\frac{1}{2}v^{2}}`</center>
+  <br>
+  <br>
+  <p>An important theoretical result is that when as long as the following 3 conditions are satistified, the kernel in questionwill be a consistent estimator of `f(x)`.
+    <br>
+    <center>`(i)` `\int k(v)dv=1`</center>
+    <br>
+    <center>`(ii)` `k(v)=k(-v)`</center>
+    <br>
+    <center>`(iii)` `\int v^{2}k(v)dv=\kappa_{2}>0`</center>
+  
+
+  
 </div>
 
   
 <div class = 'references'>
   References Books:
   <br>
-  [1]. Applied Nonparametric Econometrics 
+  [1]. Nonparametric Econometrics
   <br>
   References Sites:
   <br>
-  ]1[. <a href = 'https://www.datacamp.com/community/tutorials/functions-in-r-a-tutorial'>Anonymous functions</a> 
-</div>
-  
-<div class = 'terminlogies'>
-<h5> Terminlogies </h5>
-<br>
-four paradigms of nonparametric regression: (1) local averaging,(2) local modeling, 
-  (3) global modeling (or least squares estimation), (4) penalized modeling.  
-</div>
 
+</div>
 
 </body>
 
