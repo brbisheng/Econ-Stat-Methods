@@ -72,11 +72,18 @@
  <p>Notice that this `h_{opt}` depends on `x`, which means it is a point estimator. One disadvantange of point estimator is that 
   the optimal `h` at one point may be different from the optimal `h` chosen at another point. For this reason, we also look at the 
   integrated MSE(IMSE) of \hat{f}(x).</p>
- <p>
+ <br>
  <center>`[[IMSE(\hat{f}), \equiv, \int E[\hat{f}(x)-f(x)]^{2}dx],
-   [,,\frac{1}{4}h^{4}(\int v^{2}k(v)dv)^{2}\int[f^{(2)}(x)]^{2}dx+\frac{\int k^{2}(v)dv}{nh}+o(h^{4}+(nh)^{-1})]]`
+   [,=,\frac{1}{4}h^{4}(\int v^{2}k(v)dv)^{2}\int[f^{(2)}(x)]^{2}dx+\frac{\int k^{2}(v)dv}{nh}+o(h^{4}+(nh)^{-1})]]`
 </center>
- </p>
+ <br>
+ <p>Some calculus leads to `h_{opt}=c_{0}n^{-1/5}`, where 
+   `c_{0}=(\int v^{2}k(v)dv)^{-2/5}\times(\int k^{2}(v)dv)^{1/5}]\times\{\int[f^{(2)}(x)]^{2}dx\}^{-1/5}`</p>
+ 
+ <div class = 'mycode'>
+ <code>
+ </code>
+ </div>
 
  
   
