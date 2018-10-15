@@ -147,9 +147,23 @@ and write our estimator as
     </code>
   </div> <!--Mycode div finished-->
   
+  <p>
+    <br>
+  Remarks:  What we do is to estimate the density `f(x)` by a several boxcar functions centered at each observation. Each boxcar function is of width `2h`. The tuning parameter is still `h`, and larger values of `h` give smoother estimates.
+    <br>
+  </>
+  
 </div> <!-- naive estimator div finished. -->
 <br>
-  
+
+<div id = 'General Kernel Estimators'>
+<h1>Kernel Estimators. (Ref. [1]) </h1>
+<br>
+  1. Mostly we use symmetric kernels.
+  2. Orders of kernels matter, which is measured by the value of different moments of the kernel.
+  3. For kernels of which the order is greater than 2, we can not interpret them as densities, because they may have negative parts. 
+</div>
+
   
 <div class = 'references'>
   References Books:
