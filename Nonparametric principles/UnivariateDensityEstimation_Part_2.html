@@ -51,8 +51,17 @@
  <br>
  <p>where by Taylor expansion, we have </p>
  <br>
- <center>bias(\hat{f}(x))=\frac{h^{2}}{2}f^{(2)}(x)\int v^{2}k(v)dv+O(h^{3})</center>
+ <center>`bias(\hat{f}(x))=\frac{h^{2}}{2}f^{(2)}(x)\int v^{2}k(v)dv+O(h^{3})`</center>
  <br>
+ <p>(Notice that here, we assume that `f(x)` is 3-time differentiable, and we can weaken the condition to 2 times differentiable.)</p>
+ <br>
+ <p>Now the variance could be calculated as </p>
+ <center>var(\hat{f}(x))=\frac{1}{nh}\{(\int k^{2}(v)dv)\times f(x)+O(h)\}</center>
+ <p>So that</p>
+ <center>[[MSE(\hat{f}(x)), = , \frac{h^{4}}{4}[\int v^{2}k(v)dv\times f^{(2)}(x)]^{2}+\frac{\int k^{2}(v)dv}{nh}+o(h^{4}+(nh)^{-1})],
+   [,,O(h^{4}+(nh)^{-1})]]</center>
+ <p>which leads to </p>
+ <center>\hat{f}(x)-f(x)=O_{p}(h^{2}+(nh)^{-1/2})=o_{p}(1)</center>
  
   
 
