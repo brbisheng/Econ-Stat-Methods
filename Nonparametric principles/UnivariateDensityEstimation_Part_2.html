@@ -80,8 +80,85 @@
  <p>Some calculus leads to `h_{opt}=c_{0}n^{-1/5}`, where 
    `c_{0}=(\int v^{2}k(v)dv)^{-2/5}\times(\int k^{2}(v)dv)^{1/5}\times\{\int[f^{(2)}(x)]^{2}dx\}^{-1/5}`</p>
  
+ <br>
+ <p>Now we verify the result of IMSE numerically.</p>
+ <br>
  <div class = 'mycode'>
  <code>
+   ## Define standard normal function
+   p$kn2 <- function(x){
+     value <- (1/sqrt(2*pi)) * exp(-(x^2)/2)
+     return(value)
+   }
+
+   p$ka <- function(v){
+     value <- ((1/sqrt(2*pi)) * exp(-(v^2)/2))^2
+     return(value)
+   }
+
+   p$ka2 <- function(v){
+     value <- (v^2)* (1/sqrt(2*pi)) * exp(-(v^2)/2)
+     return(value)
+   }
+
+   ## The true distribution of our x is normal, with mean = 3, std = 1
+   p$x <- rnorm(n = p$n, mean = 3, sd = 1)
+
+   ## Suppose that we know the true distribution of p$x, so that we know f(x).
+   ## Then we have
+   p$dgp <- function(x) {
+     value <- (1/sqrt(2*pi)) * (1/1) * exp(-((x-3)^2)/(2*(1^2)))
+     return(value)
+   }
+
+   ## We now calculate its second derivative
+   p$fpp <- 
+     D(body(p$dgp)[[2]][[3]], 'x') %>% D(.,'x') # This is a call.
+
+   ## Get the expression
+   p$fpp %>% parse(text=.)
+
+   ## evaluate fpp as a function of x.
+   eval(p$fpp,list(x=1))
+
+   ## Turn fpp into a function
+   p$fppfunc <- function(x) {(eval(p$fpp))^2}
+
+   ## verify its integral
+   integrate(f = p$fppfunc, lower = -Inf, upper = Inf)
+
+   # draw curve: curve(expr = p$fppfunc(x))
+
+   ## Caculate each component of IMSE
+
+   p$IMSEcomp <- list()
+
+   p$IMSEcomp[['ka2_sq']] <- stats::integrate(f = p$ka2,
+                                           lower = -Inf,
+                                           upper = Inf)[[1]] %>% (function(x) {x^2})
+   
+   p$IMSEcomp[['ka']] <- stats::integrate(f = p$ka,
+                                       lower = -Inf,
+                                       upper = Inf)[[1]]
+
+   p$IMSEcomp[['integ']] <- integrate(f = p$fppfunc, lower = -Inf, upper = Inf)[[1]]
+
+   p$IMSE <- function(h, ka2_sq = p$IMSEcomp$ka2_sq, 
+                      ka = p$IMSEcomp$ka, 
+                      integ = p$IMSEcomp$integ) {
+  
+     value <- (1/4) * (h^4) * ka2_sq * integ + (ka)/(p$n*h)
+  
+     return(value)
+   }
+
+   # Draw curve
+   curve(expr=p$IMSE(h), xname = 'h')
+
+   # Draw the v = h_{opt}
+   abline(v=((p$IMSEcomp$ka2_sq)^(-2/5)) * 
+            ((p$IMSEcomp$ka)^(1/5)) * 
+            ((p$IMSEcomp$integ)^(-1/5)) * ((p$n)^(-1/5)))
  </code>
  </div>
 
