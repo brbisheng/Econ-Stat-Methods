@@ -10,7 +10,7 @@ Forewords:
 > Update: I am updating the sites from .markdown to .html, so many parts are unorganized for this moment, I will try to fix the issues as soon as I could.
 > 10/16/2018: Next part: bandwidth selection.
 
-Warmups:
+PRINCIPLES:
 1. Keywords: Nonparametric (Np) Statistics
     - Univariate Density Estimation 
         - [Univariate Density Estimation Part 1](https://htmlpreview.github.io/?https://github.com/brbisheng/Econ-Stat-Methods/blob/master/Nonparametric%20principles/UnivariateDensityEstimation_Part_1.html)
@@ -26,10 +26,10 @@ Warmups:
     - comments: kNN, kernel methods, regulation, many things are related to Np regression.
     
 
-Academic Papers:
+APPLICATIONS:
 
 1. Keywords of First Topic: `Nonparametric`, `seemingly unrelated regression (or SUR)` 
-    - Paper 1 : [Nonparametric seemingly unrelated regression](https://www.sciencedirect.com/science/article/pii/S030440760000018X) 
+    - Academic Paper 1 : [Nonparametric seemingly unrelated regression](https://www.sciencedirect.com/science/article/pii/S030440760000018X) 
       * > When dealing with `simultaneous equations model`, we usually use `Feasible Generalized NLS` to estimate the model. However, this method requires strong assumption on the parameter structure of the model. This paper is a remedy, published at 2000. Surprising, since then, there is no big advance. How is the quality of this paper? I have implemented the algorithms, and let us have a look at that.
       * [Implementation.]()
     - 
