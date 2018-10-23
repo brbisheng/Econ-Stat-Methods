@@ -1,7 +1,60 @@
 <html>
 <head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=AM_CHTML"></script>
+  <style>
+    .references {color:red;}
+    code {
+      background-color: powderblue;
+      white-space: pre;
+    }
+    .mycode{
+      margin: 20px 0px 100px 10px;
+      background-color: powderblue;
+      width: 70%;
+    }
+    body{
+      margin-left: 10%;
+      margin-right: 10%;
+    }
+  </style>
 </head>
 
 <body>
+  <p>We focus on data-driven methods for selecting h. Normally, the result of nonparametric kernel estimation is not insensitive to the choice of kernel function. Nevertheless, when it concerns bandwidth selection, it is not the case. When we have more data, we have more flexibility, thus less bias but higher variability. </p>
+
+  <p>We start with least square cross-validation, which provides an optimal bandiwidth to all x in support of `f(x)`.</p>
+
+  <p>We minimize `\int[\hat{f}(x)-f\left(x\right)]^{2}dx`, or equivalently 
+
+  <center>`\int\hat{f}(x)^{2}dx-2\int\hat{f}\left(x\right)f(x)dx`</center>
+  </p>
+
+ <p>The second part `\int\hat{f}\left(x\right)f(x)dx is E_{X}[\hat{f}(x)]`, which can be estimated as `n^{-1}\sum_{i=1}^{n}\hat{f}_{-i}(X_{i})`, where `\hat{f}_{-i}(X_{i})=\frac{1}{(n-1)h}\sum_{j=1,j\neq i}^{n}k(\frac{X_{i}-X_{j}}{h})` is the leave-one-out kernel estimator of `f(X_{i})`. </p>
+
+ <p>The first term `\int\hat{f}(x)^{2}dx` will be estimated by
+
+`\int\hat{f}(x)^{2}dx=\frac{1}{n^{2}h^{2}}\sum_{i=1}^{n}\sum_{j=1}^{n}\int k\left(\frac{X_{i}-x}{h}\right)k\left(\frac{X_{j}-x}{h}\right)dx`
+
+which is equal to 
+
+`\frac{1}{n^{2}h}\sum_{i=1}^{n}\sum_{j=1}^{n}\bar{k}(\frac{X_{i}-X_{j}}{h})` . where `\bar{k}=\int k(u)k(v-u)du` is the 2-fold convolution kernel given v.
+
+Least Squares cross-validation chooses h to minimize 
+
+`CV_{f}(h)=\frac{1}{n^{2}h}\sum_{i=1}^{n}\sum_{j=1}^{n}\bar{k}(\frac{X_{i}-X_{j}}{h})-\frac{2}{n(n-1)h}\sum_{i=1}^{n}\sum_{j=1,j\neq i}^{n}k(\frac{X_{i}-X_{j}}{h})`.
+
+We now denote the leading term of `CV_{f}(h)` as `CV_{f0}(h)`. 
+
+Mathematically, it can be shown that as the optimal `\hat{h}_{f0}` which minimizes `CV_{f0}(h)` is equivalent to the `\hat{h}_{IMSE}` which minimizes IMSE of the last part. And the `(\hat{h}-\hat{h}_{f0})/\hat{h}_{f0}\rightarrow0` in probability. That is to say, our least square CV solution converges to the solution as if we knew the true distribution of `f(x)`. 
+
+  <div class = 'references'>
+    References.Books:
+    <br>
+    [1]. Nonparametric econometrics
+    <br>
+  </div>
+  
 </body>
+  
+
 </html>
