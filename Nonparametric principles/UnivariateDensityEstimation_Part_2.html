@@ -89,80 +89,93 @@
  <br>
  <div class = 'mycode'>
  <code>
-   ## Define standard normal function
-   p$kn2 <- function(x){
-     value <- (1/sqrt(2*pi)) * exp(-(x^2)/2)
-     return(value)
-   }
-
-   p$ka <- function(v){
-     value <- ((1/sqrt(2*pi)) * exp(-(v^2)/2))^2
-     return(value)
-   }
-
-   p$ka2 <- function(v){
-     value <- (v^2)* (1/sqrt(2*pi)) * exp(-(v^2)/2)
-     return(value)
-   }
-
-   ## The true distribution of our x is normal, with mean = 3, std = 1
-   p$x <- rnorm(n = p$n, mean = 3, sd = 1)
-
-   ## Suppose that we know the true distribution of p$x, so that we know f(x).
-   ## Then we have
-   p$dgp <- function(x) {
-     value <- (1/sqrt(2*pi)) * (1/1) * exp(-((x-3)^2)/(2*(1^2)))
-     return(value)
-   }
-
-   ## We now calculate its second derivative
-   p$fpp <- 
-     D(body(p$dgp)[[2]][[3]], 'x') %>% D(.,'x') # This is a call.
-
-   ## Get the expression
-   p$fpp %>% parse(text=.)
-
-   ## evaluate fpp as a function of x.
-   eval(p$fpp,list(x=1))
-
-   ## Turn fpp into a function
-   p$fppfunc <- function(x) {(eval(p$fpp))^2}
-
-   ## verify its integral
-   integrate(f = p$fppfunc, lower = -Inf, upper = Inf)
-
-   # draw curve: curve(expr = p$fppfunc(x))
-
-   ## Caculate each component of IMSE
-
-   p$IMSEcomp <- list()
-
-   p$IMSEcomp[['ka2_sq']] <- stats::integrate(f = p$ka2,
-                                           lower = -Inf,
-                                           upper = Inf)[[1]] %>% (function(x) {x^2})
    
-   p$IMSEcomp[['ka']] <- stats::integrate(f = p$ka,
-                                       lower = -Inf,
-                                       upper = Inf)[[1]]
-
-   p$IMSEcomp[['integ']] <- integrate(f = p$fppfunc, lower = -Inf, upper = Inf)[[1]]
-
-   p$IMSE <- function(h, ka2_sq = p$IMSEcomp$ka2_sq, 
-                      ka = p$IMSEcomp$ka, 
-                      integ = p$IMSEcomp$integ) {
-  
-     value <- (1/4) * (h^4) * ka2_sq * integ + (ka)/(p$n*h)
-  
-     return(value)
-   }
-
-   # Draw curve
-   curve(expr=p$IMSE(h), xname = 'h')
-
-   # Draw the v = h_{opt}
-   abline(v=((p$IMSEcomp$ka2_sq)^(-2/5)) * 
-            ((p$IMSEcomp$ka)^(1/5)) * 
-            ((p$IMSEcomp$integ)^(-1/5)) * ((p$n)^(-1/5)))
+    ############ BIAS AND VARIANCE TRADE-OFF
+    
+    ### Number of observations.
+    p$n <- 2000
+    
+    ## Get the h sequence
+    
+    p$h <- seq(from = 0,to = 1,length.out = 100)
+    p$h[1] <- p$h[1] + 0.000001
+    
+    ## Define standard normal function
+    f$kn_stdnorm <- function(x){
+      value <- (1/sqrt(2*pi)) * exp(-(x^2)/2)
+      return(value)
+    }
+    
+    ## Define helper functions, notably the integrands of ka and ka_sqr 
+    f$ka_ig <- function(x){
+      value <- (f$kn_stdnorm(x))^2 
+      return(value)
+    }
+    
+    f$ka2_ig <- function(x){
+      value <- (x^2)* (1/sqrt(2*pi)) * exp(-(x^2)/2)
+      return(value)
+    }
+    
+    ## The true distribution of our x is normal, with mean = 3, std = 1
+    d$x <- rnorm(n = p$n, mean = 3, sd = 1)
+    
+    ## Suppose that we know the true distribution of p$x, so that we know f(x).
+    ## Then we have
+    f$dgp <- function(x) {
+      value <- (1/sqrt(2*pi)) * (1/1) * exp(-((x-3)^2)/(2*(1^2)))
+      return(value)
+    }
+    
+    ## We now calculate its second derivative
+    f$fdd <- 
+      D(body(f$dgp)[[2]][[3]], 'x') %>% D(.,'x') # This is a call.
+    
+    ## Get the expression
+    f$fdd %>% parse(text=.)
+    
+    ## evaluate fpp as a function of x.
+    eval(f$fdd,list(x=1))
+    
+    ## Turn fpp into a function, and get (f'')^2
+    f$fddfunc <- function(x) {(eval(f$fdd))^2}
+    
+    ## verify its integral
+    integrate(f = f$fddfunc, lower = -Inf, upper = Inf)
+    
+    # draw curve: curve(expr = p$fppfunc(x))
+    
+    ## Caculate each component of IMSE
+    
+    d$IMSEcomp <- list()
+    
+    d$IMSEcomp[['ka2_sq']] <- stats::integrate(f = f$ka2_ig,
+                                            lower = -Inf,
+                                            upper = Inf)[[1]] %>% (function(x) {x^2})
+    
+    d$IMSEcomp[['ka']] <- stats::integrate(f = f$ka_ig,
+                                        lower = -Inf,
+                                        upper = Inf)[[1]]
+    
+    d$IMSEcomp[['integ']] <- 
+      integrate(f = f$fddfunc, lower = -Inf, upper = Inf)[[1]]
+    
+    d$IMSE <- function(h, ka2_sq = d$IMSEcomp$ka2_sq, 
+                       ka = d$IMSEcomp$ka, 
+                       integ = d$IMSEcomp$integ) {
+      
+      value <- (1/4) * (h^4) * ka2_sq * integ + (ka)/(p$n*h)
+      
+      return(value)
+    }
+    
+    # Draw curve
+    curve(expr=d$IMSE(h), xname = 'h')
+    
+    # Draw the v = h_{opt}
+    abline(v=((d$IMSEcomp$ka2_sq)^(-2/5)) * 
+             ((d$IMSEcomp$ka)^(1/5)) * 
+             ((d$IMSEcomp$integ)^(-1/5)) * ((p$n)^(-1/5)))
  </code>
  </div>
 
