@@ -32,7 +32,7 @@
   <center>`\int\hat{f}(x)^{2}dx-2\int\hat{f}\left(x\right)f(x)dx`</center>
   </p>
 
-  <p>The second part `\int\hat{f}\left(x\right)f(x)dx` is `E_{X}[\hat{f}(x)]`, which can be estimated as `n^{-1}\sum_{i=1}^{n}\hat{f}_{-i}(X_{i})`, where `\hat{f}_{-i}(X_{i})=\frac{1}{(n-1)h}\sum_{j=1,j\neq i}^{n}k(\frac{X_{i}-X_{j}}{h})` is the leave-one-out kernel estimator of `f(X_{i})`. </p>
+  <p>The second part `\int\hat{f}\left(x\right)f(x)dx` is `E_{X}[\hat{f}(x)]`, which we can estimate by `n^{-1}\sum_{i=1}^{n}\hat{f}_{-i}(X_{i})`, where `\hat{f}_{-i}(X_{i})=\frac{1}{(n-1)h}\sum_{j=1,j\neq i}^{n}k(\frac{X_{i}-X_{j}}{h})` is the leave-one-out kernel estimator of `f(X_{i})`. </p>
 
   <p>The first term `\int\hat{f}(x)^{2}dx` will be estimated by
 
