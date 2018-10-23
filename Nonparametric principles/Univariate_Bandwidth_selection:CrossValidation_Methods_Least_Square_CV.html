@@ -36,16 +36,16 @@
 
   <p>The first term `\int\hat{f}(x)^{2}dx` will be estimated by
 
-`\int\hat{f}(x)^{2}dx=\frac{1}{n^{2}h^{2}}\sum_{i=1}^{n}\sum_{j=1}^{n}\int k\left(\frac{X_{i}-x}{h}\right)k\left(\frac{X_{j}-x}{h}\right)dx`
+<center>`\int\hat{f}(x)^{2}dx=\frac{1}{n^{2}h^{2}}\sum_{i=1}^{n}\sum_{j=1}^{n}\int k\left(\frac{X_{i}-x}{h}\right)k\left(\frac{X_{j}-x}{h}\right)dx`</center>
 
 which is equal to 
 
-`\frac{1}{n^{2}h}\sum_{i=1}^{n}\sum_{j=1}^{n}\bar{k}(\frac{X_{i}-X_{j}}{h})` . where `\bar{k}=\int k(u)k(v-u)du` is the 2-fold convolution kernel given v.
+<center>`\frac{1}{n^{2}h}\sum_{i=1}^{n}\sum_{j=1}^{n}\bar{k}(\frac{X_{i}-X_{j}}{h})`</center> . where `\bar{k}=\int k(u)k(v-u)du` is the 2-fold convolution kernel given v.
   </p>
 
   <p>Least Squares cross-validation chooses h to minimize 
 
-`CV_{f}(h)=\frac{1}{n^{2}h}\sum_{i=1}^{n}\sum_{j=1}^{n}\bar{k}(\frac{X_{i}-X_{j}}{h})-\frac{2}{n(n-1)h}\sum_{i=1}^{n}\sum_{j=1,j\neq i}^{n}k(\frac{X_{i}-X_{j}}{h})`.
+<center>`CV_{f}(h)=\frac{1}{n^{2}h}\sum_{i=1}^{n}\sum_{j=1}^{n}\bar{k}(\frac{X_{i}-X_{j}}{h})-\frac{2}{n(n-1)h}\sum_{i=1}^{n}\sum_{j=1,j\neq i}^{n}k(\frac{X_{i}-X_{j}}{h})` </center>
   </p>
 
   <p>We now denote the leading term of `CV_{f}(h)` as `CV_{f0}(h)`.</p> 
