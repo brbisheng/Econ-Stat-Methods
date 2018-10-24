@@ -18,7 +18,7 @@ PRINCIPLES:
     - Univariate Bandwidth Selection
         - Plug-in Methods
         - Cross-Validation methods
-            - Least Squares Cross-Validation
+            - [Least Squares Cross-Validation (about to finish)](https://htmlpreview.github.io/?https://github.com/brbisheng/Econ-Stat-Methods/blob/master/Nonparametric%20principles/Univariate_Bandwidth_selection:CrossValidation_Methods_Least_Square_CV.html)
             - Likelihood Cross-Validation
     - Univariate CDF Estimation
     - Univariate CDF Bandwidth Selection
