@@ -59,7 +59,106 @@ which is equal to
     <br>
   </div>
   
+  <div class ='mycode'>
+  <code>
+    library(ggplot2)
+    library(magrittr) ## to use pipe operator
+    
+    ### Create new environments
+    p <- new.env() # environment for parameters
+    d <- new.env() # environment for data
+    f <- new.env() # environment for functions
+    
+    ### Number of observations.
+    p$n <- 2000
+    
+    ## The true distribution of our x is normal, with mean = 3, std = 1
+    d$x <- rnorm(n = p$n, mean = 3, sd = 1)
+    
+    ### Standard normal kernel
+    f[['kn_stdnorm']] <- function(x) {
+      value <- exp(-(x^2)/2)/sqrt(2*pi)
+      return(value)
+    } 
+    
+    f[['kn_stdnorm_wrapper']] <- function(h, xi, x) {
+      value <- f$kn_stdnorm((x-xi)/h)
+      return(value)
+    } 
+    
+    
+    f[['fi']] <- function(h, i, x) {
+      
+      if (i == 1) {
+        xnew <- x[c(2:length(x))]
+      } else if (i == length(x)) {
+        xnew <- x[c(1:(length(x)-1))]
+      } else {
+        xnew <- x[c(c(1:(i-1)),c((i+1):(length(x))))]
+      }
+      sum1 <- 0
+      for (xj in xnew) {
+        
+        sum1 <- sum1 + f$kn_stdnorm((xj-x[i])/h)
+      }
+      return(sum1/(h*(length(x)-1)))
+      
+    }
+    
+    ### Leave one out kernel estimator:
+    
+    f$festexp <- function(h, x) {
+      sum1 <- 0
+      for (i in 1:length(x)) {
+        sum1 <- sum1 + f$fi(h, i, x)
+      }
+      return(sum1/(length(x)-1))
+    }
+    
+    
+    
+    # The computation is so much faster if we calculate the integral analytically.
+    
+    f$festsq <- function(h,x) {
+      sum1 <- 0
+      for (i in 1:length(x)) {
+        for (j in 1:length(x)) {
+          xi <- x[i]
+          xj <- x[j]
+          
+          kcov <- function(x) {exp(-x^2/4)/sqrt(4*pi)}
+          sum1 <- sum1 + kcov((xi-xj)/h)
+        }
+        
+      }
+      return(sum1/(h*(p$n)^2))
+    }
+    
+    ## Cross validation function
+    f$LSCV <- function(h,x=d$x) {
+      return(f$festsq(h,x=d$x)-2 *f$festexp(h,x=d$x))
+    }
+    
+    p$h <- seq(from = 0,to = 1,length.out = 100)
+    p$h[1] <- p$h[1] + 0.000001
+    
+    p$ggplot1 <- ggplot(data = data.frame(h = 0), mapping = aes(x = h))
+    p$ggplot1 + stat_function(fun = f$IMSE, color = 'red' ) + 
+      stat_function(fun = f$LSCV, args = list(x=d$x), color = 'blue' ) + xlim(0,1)
+    
+    ## Verify that the LSCV solution converges to the IMSE solution
+    
+    which(f$IMSE(h = p$h) == min(f$IMSE(h = p$h))) %>% p$h[.]
+    
+    which(f$LSCV(h = p$h) == min(f$LSCV(h = p$h))) %>% p$h[.]
+    
+  </code>
+  </div>
 </body>
   
+  <div class = 'references'>
+    <p>References.Books</p>
+    <p>[1]. Nonparametric Econometrics</p>
+  </div>
 
 </html>
