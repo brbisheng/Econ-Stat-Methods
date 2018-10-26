@@ -19,7 +19,7 @@ PRINCIPLES:
         - Plug-in Methods
         - Cross-Validation methods
             - [Least Squares Cross-Validation](https://htmlpreview.github.io/?https://github.com/brbisheng/Econ-Stat-Methods/blob/master/Nonparametric%20principles/Univariate_Bandwidth_selection:CrossValidation_Methods_Least_Square_CV.html)
-            - Likelihood Cross-Validation
+            - [Likelihood Cross-Validation](https://htmlpreview.github.io/?https://github.com/brbisheng/Econ-Stat-Methods/blob/master/Nonparametric%20principles/Univariate_Bandwidth_selection:CrossValidation_Methods_Likelihood_CV.html)
     - Univariate CDF Estimation
     - Univariate CDF Bandwidth Selection
 2. Keywords: Nonparametric (Np) regression
