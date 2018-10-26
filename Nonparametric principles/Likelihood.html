@@ -21,7 +21,13 @@
 
 <body>
   
-  <h3>Univariate Bandwidth Selection: Cross Validation: Least Square Cross Validation</h3>
+  <h3>Univariate Bandwidth Selection: Cross Validation: Likelihood Cross-Validation</h3>
+  
+  <p>This method chooses h to maximize the (leave-one-out) log likelihood function:</p>
+
+  <center>\mathcal{L}=\text{ln}L=\sum_{i=1}^{n}\text{ln}\hat{f}_{-i}(X_{i})</center>
+
+  <p>The main problem of this method is that the result is affected severely by the tail behavior of f(x). For thin tailed distributions, it works well, but for fat tailed distribution it is not the case.</p>
   
   <div class = 'references'>
     References.Books:
@@ -32,7 +38,23 @@
   
   <div class ='mycode'>
   <code>
-   
+    ## Define the likelihood function
+    f$likelihood_fi <- function(h,x) {
+      sum1 <- 0
+      
+      for (i in 1:length(x)) {
+        sum1 <- sum1 + log(f$fi(h = h, i = i, x = x))
+      }
+      return(sum1)
+    }
+    
+    ## Optimize with 'Brent'
+    optim(par = 0.1, fn = f$likelihood_fi, x = d$x, method = 'Brent')
+    
+    ## Optimize with directly, because this is a one parameter function.
+    optimize(f=f$likelihood_fi, lower = 0, upper = 1,maximum = TRUE, x =d$x)
+    
+    ## The result is less accurate compared to the last method where we minimize the integrated square difference.
   </code>
   </div>
 </body>
