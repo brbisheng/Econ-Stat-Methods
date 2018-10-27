@@ -3,9 +3,9 @@ Forewords:
 
 1. Recently, I started a **(long-term)** freelance project: Algorithms from scratch. This page is dedicated to implementing statistical/econometric methods from scratch. You could also find implementation of machine learning methods [here](https://brbisheng.github.io/algorithms/).
 
-2. So what I do is to transform all my understandings of the statistical/econometric methods from **academic papers** and **text books** to code. Why? Many of the papers do not provide code, but just give algorithmes. 20% of the time, when I try to implement their methods by myself, I often find mistakes. So, let us just do it from scratch for the sake of better understanding them and inventing our own methods.
+2. So what I do is to transform all my understandings of the statistical/econometric methods from **academic papers** and **textbooks** to code. Why? Many of the papers do not provide code, just algorithmes. When I try to implement their methods by myself, for 20% of the time I find mistakes. So, let us do it from scratch for the sake of better understanding them and inventing our own methods.
 
-3. This site is still under construction, the structure may vary, but I try to work diligently to make it indeed a **long-term** project and a place useful for people.  
+3. This site is still under construction, the structure may vary, but I try keep working to make it indeed a **long-term** project and a place useful for people.  
 
 > Update: I am updating the sites from .markdown to .html, so many parts are unorganized for this moment, I will try to fix the issues as soon as I could.
 > 10/27/2018: Next part: bandwidth selection.
@@ -16,7 +16,7 @@ PRINCIPLES:
     - Univariate Density Estimation 
         - [Univariate Density Estimation Part 1](https://htmlpreview.github.io/?https://github.com/brbisheng/Econ-Stat-Methods/blob/master/Nonparametric%20principles/UnivariateDensityEstimation_Part_1.html)
         - [Univariate Density Estimation Part 2](https://htmlpreview.github.io/?https://github.com/brbisheng/Econ-Stat-Methods/blob/master/Nonparametric%20principles/UnivariateDensityEstimation_Part_2.html)
-    - Univariate Bandwidth Selection
+    - Univariate Density Bandwidth Selection
         - Plug-in Methods (old-fashioned, not covered)
         - Cross-Validation methods
             - [Least Squares Cross-Validation](https://htmlpreview.github.io/?https://github.com/brbisheng/Econ-Stat-Methods/blob/master/Nonparametric%20principles/Univariate_Bandwidth_selection:CrossValidation_Methods_Least_Square_CV.html)
