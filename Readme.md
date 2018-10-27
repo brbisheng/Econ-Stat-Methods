@@ -9,7 +9,7 @@ Forewords:
 
 > Update: I am updating the sites from .markdown to .html, so many parts are unorganized for this moment, I will try to fix the issues as soon as I could.
 > 10/27/2018: Next part: bandwidth selection.
-> ## I appreciate any comments and spotted mistakes. Thank you. 
+> ### Everything is tested, but if there is any inconsistency, I appreciate that you let me know, and any comments and spotted mistakes would be important. Thank you. 
 
 PRINCIPLES:
 1. Keywords: Nonparametric (Np) Statistics
