@@ -24,7 +24,7 @@ PRINCIPLES:
     - Univariate CDF Estimation
         - [Univariate CDF Estimation](https://htmlpreview.github.io/?https://github.com/brbisheng/Econ-Stat-Methods/blob/master/Nonparametric%20principles/UnivariateCDFEstiamtion_Part_1.html)
     - Univariate CDF Bandwidth Selection
-        - 
+        - ...
 2. Keywords: Nonparametric (Np) regression
     - comments: kNN, kernel methods, regulation, many things are related to Np regression.
     
