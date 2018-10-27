@@ -16,12 +16,14 @@ PRINCIPLES:
         - [Univariate Density Estimation Part 1](https://htmlpreview.github.io/?https://github.com/brbisheng/Econ-Stat-Methods/blob/master/Nonparametric%20principles/UnivariateDensityEstimation_Part_1.html)
         - [Univariate Density Estimation Part 2](https://htmlpreview.github.io/?https://github.com/brbisheng/Econ-Stat-Methods/blob/master/Nonparametric%20principles/UnivariateDensityEstimation_Part_2.html)
     - Univariate Bandwidth Selection
-        - Plug-in Methods
+        - Plug-in Methods (old-fashioned, not covered)
         - Cross-Validation methods
             - [Least Squares Cross-Validation](https://htmlpreview.github.io/?https://github.com/brbisheng/Econ-Stat-Methods/blob/master/Nonparametric%20principles/Univariate_Bandwidth_selection:CrossValidation_Methods_Least_Square_CV.html)
             - [Likelihood Cross-Validation](https://htmlpreview.github.io/?https://github.com/brbisheng/Econ-Stat-Methods/blob/master/Nonparametric%20principles/Univariate_Bandwidth_selection:CrossValidation_Methods_Likelihood_CV.html)
     - Univariate CDF Estimation
+        - [Univariate CDF Estimation](https://htmlpreview.github.io/?https://github.com/brbisheng/Econ-Stat-Methods/blob/master/Nonparametric%20principles/UnivariateCDFEstiamtion_Part_1.html)
     - Univariate CDF Bandwidth Selection
+        - 
 2. Keywords: Nonparametric (Np) regression
     - comments: kNN, kernel methods, regulation, many things are related to Np regression.
     
