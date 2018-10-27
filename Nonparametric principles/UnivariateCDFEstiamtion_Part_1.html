@@ -23,6 +23,183 @@
   
   <h3>Univariate CDF Estimation</h3>
   
+  <p>In this section, we derive the MSE and IMSE of `\hat{F}`, assuming that we know the true distribution of the data. We will see that there exists an `h` such that the MSE and IMSE could be minimized.</p>
+
+<br>
+
+  <p>Instead of estimating `F(x)` by `F_{n}(x)=\frac{1}{n}\{\#\,of\,X_{i}'s\leq x\}`, we use the following smoothed estimate of `F(x)` by integrating `\hat{f}(x)`. </p>
+<br>
+<p>So, we define </p>
+
+<center>`\hat{F}(x)=\int_{-\infty}^{x}\hat{f}(v)dv=\frac{1}{n}\sum_{i=1}^{n}G(\frac{x-X_{i}}{h})`.</center> 
+where `G(x)=\int_{-\infty}^{x}k(v)dv`.
+
+<p>Note that `E[\hat{F}(x)]=E[G(\frac{x-X_{i}}{h})]`.</p>
+
+<p>Now we derive `MSE(\hat{F})`.</p>
+
+<center>`MSE(\hat{F})=E[\hat{F}(x)-F(x)]^{2}`</center>
+
+<center>`MSE(\hat{F})=\frac{c_{0}(x)}{n}-\frac{c_{1}(x)h}{n}+c_{2}(x)h^{4}+o(h^{4}+\frac{h}{n})`</center>
+
+where 
+
+`c_{0}(x)=F(x)(1-F(x))`,
+
+`c_{1}(x)=\alpha_{0}f(x)`,
+
+`\alpha_{0}=2\int vG(v)k(v)dv`,
+
+`f(x)=dF(x)/dx`,
+
+`c_{2}(x)=[(\kappa_{2}/2)F^{(2)}(x)]^{2}`, 
+
+`\kappa_{2}=\int v^{2}k(v)dv`
+
+<div class = 'mycode'>
+  <code>
+    ############ MSE and IMSE
+    
+    ### Create new environments
+    p <- new.env() # environment for parameters
+    d <- new.env() # environment for data
+    f <- new.env() # environment for functions
+    
+    ### Number of observations.
+    p$n <- 2000
+    
+    ## Get the h sequence
+    
+    p$h <- seq(from = 0,to = 1,length.out = 100)
+    p$h[1] <- p$h[1] + 0.000001
+    
+    ## Define standard normal function
+    f$kn_stdnorm <- function(x){
+      value <- (1/sqrt(2*pi)) * exp(-(x^2)/2)
+      return(value)
+    }
+    
+    ## The true distribution of our x is normal, with mean = 3, std = 1
+    d$x <- rnorm(n = p$n, mean = 3, sd = 1)
+    
+    ## Suppose that we know the true distribution of p$x, so that we know f(x).
+    ## Then we have
+    f$dgp <- function(x) {
+      value <- (1/sqrt(2*pi)) * (1/1) * exp(-((x-3)^2)/(2*(1^2)))
+      return(value)
+    }
+    
+    ## Define helper functions
+    
+    ## Function ... CDF
+    
+    f$F <- function(x) {
+      if (length(x)  == 1) {
+        value <- integrate(f = f$dgp, 
+                           lower = -Inf, 
+                           upper = x)[[1]]
+      }
+      if (length(x) > 1) {
+        value <- sapply(x, function(x) integrate(f = f$dgp,lower = -Inf,upper = x)[[1]])
+        # value <- Vectorize(function(x) integrate(f = f$dgp,lower = -Inf,upper = x)[[1]])
+      }
+      
+      return(value)
+    }
+    
+    ## Function ... c0
+    f$c0 <- function(x) {
+      value <- f$F(x)* (1-f$F(x))
+      return(value)
+    }
+    
+    
+    ## Function ... c1
+    f$G <- function(x) {
+      if (length(x)  == 1) {
+        value <- integrate(f = f$kn_stdnorm, 
+                           lower = -Inf, 
+                           upper = x)[[1]]
+      }
+      if (length(x) > 1) {
+        value <- sapply(x, function(x) integrate(f = f$kn_stdnorm,lower = -Inf,upper = x)[[1]])
+        # value <- Vectorize(function(x) integrate(f = f$dgp,lower = -Inf,upper = x)[[1]])
+      }
+      
+      return(value)
+    }
+    
+    
+    f$alpha0_inner <- function(x){
+      
+      x * f$G(x) * f$kn_stdnorm(x)
+    
+    }
+    
+    f$c1 <- function(x) {
+      alpha0 <- integrate(f = f$alpha0_inner, lower = -Inf, upper = Inf)[[1]]
+      value <- 2 * alpha0 * f$dgp(x)
+      return(value)
+    }
+    
+    ## Function ... c2
+    f$ka2_inner <- function(x) {
+      (x^2) * f$kn_stdnorm(x)
+    }
+    
+    
+    f$Fdd <- function(x) {
+      fd <- D(expr = body(f$dgp)[[2]][[3]], name = 'x')
+      
+      return(eval(fd))
+    }
+    
+    f$c2 <- function(x) {
+      
+      ka2 <- integrate(f=f$ka2_inner, lower = -Inf,
+                       upper = Inf)[[1]]
+      
+      value <- ((ka2/2) * f$Fdd(x))^2
+      
+      return(value)
+      
+    }
+    
+    
+    ## MSE, as a function of x and h
+    
+    f$MSECDF <- function(x,h) {
+      value <- (f$c0(x)/p$n) - 
+        (f$c1(x) * h/p$n) + f$c2(x) * (h)^4
+      return(value)
+    }
+    
+    ## Draw curve to locate the minimum point, and verify.
+    
+    curve(expr = f$MSECDF(x=1.3,h), xname = 'h', from = 0, to=0.2)
+    
+    ggplot(data = data.frame(h=0), mapping = aes(x=h)) + 
+      stat_function(fun = f$MSECDF, args = list(x=1)) + xlim(0,0.2)
+    
+    which(min(f$MSECDF(x=1, h = p$h)) == f$MSECDF(x=1, h = p$h)) %>% p$h[.]
+ <code>
+ </div>
+  
+.....
+
+The IMSE of `\hat{F}` is 
+
+`IMSE(\hat{F})=\int E[\hat{F}(x)-F(x)]^{2}dx`
+
+`IMSE(\hat{F})=C_{0}n^{-1}-C_{1}hn^{-1}+C_{2}h^{4}+o(h^{4}+hn^{-1})`
+
+where `C_{j}=\int c_{j}(x)dx`.
+
+The key lesson is that the `h_{0}` that minimizes the leading term of IMSE is 
+
+`h_{0}=a_{0}n^{-1/3}`, where `a_{0}=[\frac{C_{1}}{4C_{2}}]^{1/3}`.
+
+This implies that the optimal smoothing parameter for estimating a univariate CDF has a faster rate of convergence than the optimal smoothing parameter of the corresponding univariate PDF `(n^{-\frac{1}{3}} v.s. n^{-\frac{1}{5}})`. 
   
   
   <div class = 'references'>
@@ -30,12 +207,6 @@
     <br>
     [1]. Nonparametric econometrics
     <br>
-  </div>
-  
-  <div class ='mycode'>
-  <code>
-
-  </code>
   </div>
     
   <p>Up to this point, we should be aware that the objective function upon which we optimize to obtain the `h` is important.</p>
