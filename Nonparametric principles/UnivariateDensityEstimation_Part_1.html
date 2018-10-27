@@ -26,12 +26,13 @@
   <h1>Crude Estimator. (Ref. [1])</h1>
   <br>
   1. Estimation
+  <p>Suppose that </p>
   <br>
-  - Data from interval `\left[a,b\right]`
+  <p>1. Our data comes from the interval `\left[a,b\right]`.</p>
   <br>
-  - Number of observations is `n`, Number of patitions is `J`, each of length `h=(b-a)/J`. (Assumption: partitions identical)
+  <p>2. Number of observations is `n`, Number of patitions is `J`, each of length `h=(b-a)/J`. (Assumption: partitions identical) </p>
   <br>
-  Then, Crude estimator is `\hat{f_{j}}=\frac{n_{j}}{nh}`, where `n_{j}` denotes the number of observations appearing in interval `j`.
+  <p>Then, the crude estimator is `\hat{f_{j}}=\frac{n_{j}}{nh}`, where `n_{j}` denotes the number of observations appearing in interval `j`.</p>
   <br>
   <div class = 'mycode'>
   <code>
@@ -76,9 +77,9 @@
   <p>
   Remarks:
     <br>
-    1. There are a lot of holes, because the intervals are left-open, right-closed.
+    <p>1. On running the code, you will notice that there are a lot of holes, because the intervals are left-open, right-closed.</p>
     <br>
-    2. This method is dependent upon the `J` we choose.
+    <p>2. On ajusting `J`, you will notice how the result depends crucially upon the `J` we choose.</p>
     <br>
   </p>
   <br>
@@ -87,17 +88,17 @@
   <div>
   2. Bias-Variance Trade-off
     <br>
-    Bias is the difference between estimated and observed value, increasing in binwidth `h`
+    <p>Bias is the difference between estimated and observed value, increasing in binwidth `h`.</p>
     <br>
-    Variance of the estimator `\hat{f_{j}}=\frac{n_{j}}{nh}` follows binomial distribution, is decreasing in binwidth `h`.
+    <p>Variance of the estimator `\hat{f_{j}}=\frac{n_{j}}{nh}` follows binomial distribution, is decreasing in binwidth `h`.</p>
     <br>
-    There exists an `h^{*}` such that the Bias and Variance trade-off is MINIMIZED.
+    <p>There exists an `\hat{h}` such that the Bias and Variance trade-off is MINIMIZED.</p>
     <br>
-    Final Remarks: Both Bias and Variance decrease when `n` increases.
+    <p>Final Remarks: Both Bias and Variance decrease when `n` increases.</p>
     <br>
-    If we require that `nh \rightarrow 0` and `h \rightarrow 0`, both Bias and Variance decrease, suggesting that this crude estimator converges in the mean square error sense. As the sample size increases (`n` increases), we get more information about the sample, we can then further partition the interval, which in turn decreases the binwidth, lowers bias. At the same time, we cannot lower `h` so that it offsets the gains in information that we obtain, thus `h/n \rightarrow0`. 
+    <p>If we require that `nh \rightarrow 0` and `h \rightarrow 0`, both Bias and Variance decrease, suggesting that this crude estimator converges in the mean square error sense. As the sample size increases (`n` increases), we get more information about the sample, we can then further partition the interval, which in turn decreases the binwidth, lowers bias. At the same time, we cannot lower `h` so that it offsets the gains in information that we obtain, thus `h/n \rightarrow0`.</p> 
     <br>
-    In this crude approximation, we start from partition of intervals to construct the bins. We now consider several focus points, around which we construct the bins. This estimator is known as the naïve density estimator or a centered histogram.
+    <p>In this crude approximation, we start from partition of intervals to construct the bins. We now consider several focus points, around which we construct the bins. This estimator is known as the naïve density estimator or a centered histogram.</p>
   </div> <!-- crude estimator bias-variance div finished. -->
 
 </div> <!-- crude estimator div finished. -->
@@ -110,17 +111,17 @@
 <div id = 'Naive Estimator'>
 <h1>Naive Estimator. (Ref. [1]) </h1>
 <br>
-`n` observations. For each `i\in\{ 1,..,n\}`, we place the bin centerred at each observation `x_{i}`. Then the number of observations that are within of the bin containing our point of interest is
+<p>We have `n` observations. For each `i\in\{ 1,..,n\}`, we place the bin centerred at each observation `x_{i}`. Then the number of observations that are within of the bin containing our point of interest is </p>
 <br>
 <center> `n_{x_{i}}=\sum_{i=1}^{n}1\{ x_{i}-h\leq x\leq x_{i}+h\}` </center>
-and the density estimator becomes 
+<p>and the density estimator becomes </p>
 <center>
 `\hat{f}(x)=\frac{1}{nh}\sum_{i=1}^{n}\frac{1}{2}\times 1\{|\frac{x_{i}-x}{h}|\leq1\}`</center>
 <br>
-We now introduce the definition of kernel
+<p>We now introduce the definition of kernel</p>
 <center>`k(\psi)={(1/2, \psi\leq1),(0, \psi>1):}`</center>
 <br>
-and write our estimator as 
+<p>and write our estimator as </p>
 <center>  `\hat{f}(x)=\frac{1}{n}\sum_{i=1}^{n}\frac{1}{h}\times K(\frac{x_{i}-x}{h})` </center>
   <div class = 'mycode'>
     <code>
@@ -154,9 +155,9 @@ and write our estimator as
     </code>
   </div> <!--Mycode div finished-->
   
-  <p>
-    <br>
-  Remarks:  What we do is to estimate the density `f(x)` by a several boxcar functions centered at each observation. Each boxcar function is of width `2h`. The tuning parameter is still `h`, and larger values of `h` give smoother estimates.
+  
+  <br>
+  <p>Remarks:  What we do is to estimate the density `f(x)` by a several boxcar functions centered at each observation. Each boxcar function is of width `2h`. The tuning parameter is still `h`, and larger values of `h` give smoother estimates.</p>
     <br>
   </>
   
