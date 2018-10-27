@@ -195,12 +195,36 @@ The IMSE of `\hat{F}` is
 
 where `C_{j}=\int c_{j}(x)dx`.
 
-The key lesson is that the `h_{0}` that minimizes the leading term of IMSE is 
+<p>The key lesson is that the `h_{0}` that minimizes the leading term of IMSE is
 
-`h_{0}=a_{0}n^{-1/3}`, where `a_{0}=[\frac{C_{1}}{4C_{2}}]^{1/3}`.
+`h_{0}=a_{0}n^{-1/3}`, where `a_{0}=[\frac{C_{1}}{4C_{2}}]^{1/3}`.</p>
 
-This implies that the optimal smoothing parameter for estimating a univariate CDF has a faster rate of convergence than the optimal smoothing parameter of the corresponding univariate PDF `(n^{-\frac{1}{3}} v.s. n^{-\frac{1}{5}})`. 
+<p>This implies that the optimal smoothing parameter for estimating a univariate CDF has a faster rate of convergence than the optimal smoothing parameter of the corresponding univariate PDF `(n^{-\frac{1}{3}} v.s. n^{-\frac{1}{5}})`. </p>
   
+  <div class = 'mycode'>
+    <code>
+      ############## IMSE now
+      
+      d$C0 <- integrate(f = f$c0, lower = -Inf, upper = Inf)[[1]]
+      
+      d$C1 <- integrate(f = f$c1, lower = -Inf, upper = Inf)[[1]]
+      
+      d$C2 <- integrate(f = f$c2, lower = -Inf, upper = Inf)[[1]]
+      
+      f$IMSECDF <- function(h) {
+        value <- (d$C0/p$n) - 
+          (d$C1*h/p$n) + (d$C2 * h^4)
+        return(value)
+      }
+      
+      curve(expr = f$IMSECDF(h), xname = 'h', from = 0, to=0.3)
+      
+      ggplot(data = data.frame(h=0), mapping = aes(x=h)) + 
+        stat_function(fun = f$IMSECDF) + xlim(0,0.3)
+      
+      which(min(f$IMSECDF(h = p$h)) == f$IMSECDF(h = p$h)) %>% p$h[.]
+    </code>
+  </div>
   
   <div class = 'references'>
     References.Books:
