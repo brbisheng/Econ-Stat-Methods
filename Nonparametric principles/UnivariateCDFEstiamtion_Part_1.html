@@ -182,16 +182,16 @@ where
       stat_function(fun = f$MSECDF, args = list(x=1)) + xlim(0,0.2)
     
     which(min(f$MSECDF(x=1, h = p$h)) == f$MSECDF(x=1, h = p$h)) %>% p$h[.]
- <code>
+  </code>
  </div>
   
 .....
 
 The IMSE of `\hat{F}` is 
 
-`IMSE(\hat{F})=\int E[\hat{F}(x)-F(x)]^{2}dx`
+<center>`IMSE(\hat{F})=\int E[\hat{F}(x)-F(x)]^{2}dx`</center>
 
-`IMSE(\hat{F})=C_{0}n^{-1}-C_{1}hn^{-1}+C_{2}h^{4}+o(h^{4}+hn^{-1})`
+<center>`IMSE(\hat{F})=C_{0}n^{-1}-C_{1}hn^{-1}+C_{2}h^{4}+o(h^{4}+hn^{-1})`</center>
 
 where `C_{j}=\int c_{j}(x)dx`.
 
