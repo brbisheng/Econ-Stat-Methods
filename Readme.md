@@ -8,7 +8,8 @@ Forewords:
 3. This site is still under construction, the structure may vary, but I try to work diligently to make it indeed a **long-term** project and a place useful for people.  
 
 > Update: I am updating the sites from .markdown to .html, so many parts are unorganized for this moment, I will try to fix the issues as soon as I could.
-> 10/16/2018: Next part: bandwidth selection.
+> 10/27/2018: Next part: bandwidth selection.
+> ## I appreciate any comments and spotted mistakes. Thank you. 
 
 PRINCIPLES:
 1. Keywords: Nonparametric (Np) Statistics
