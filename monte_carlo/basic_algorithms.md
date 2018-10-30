@@ -1,4 +1,4 @@
-```{r}
+```r
 ## Using uniformly distribution variable to produce two independent draws from N(0,1)
 
 set.seed(123)
