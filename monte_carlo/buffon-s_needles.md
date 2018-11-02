@@ -26,11 +26,8 @@ y2 <- y1 + l * sin(theta)
 
 criterion <- function(y1,y2) {
    
-  #result <- (pmin(y1,y2) - mod(pmin(y1,y2),d) + 1) <= 
-  #   (pmax(y1,y2) - mod(pmax(y1,y2),d))
-  
   result <- ceiling(pmin(y1,y2)/d) <= 
-    floor(pmax(y1,y2)/d)   ## remember to normalize by d!
+    floor(pmax(y1,y2)/d)   ## normalize by d!
   
   return(result)
   
