@@ -1,7 +1,9 @@
 
 As you could see, there are a lot of parameters that we can play with! 
-The gambling strategy part is especially interesting.
-You can also define the utility and risk attitude of the player!
+
+The gambling strategy part is especially interesting. How does the Probability density of gambling intensity evolve at different stages of playing?
+
+You can also define the utility and risk attitude of the player! -- reinforcement learning
 
 ```r
 library(ggplot2)
