@@ -1,5 +1,7 @@
 
-As you could see, there are a lot of parameters to play around with, especially the gambling strategy part.
+As you could see, there are a lot of parameters that we can play with! 
+The gambling strategy part is especially interesting.
+You can also define the utility and risk attitude of the player!
 
 ```r
 library(ggplot2)
