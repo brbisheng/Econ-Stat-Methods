@@ -6,9 +6,9 @@ The proposal function is 'minimal neighborhoods'
 ```r
 ## Markov Chain Monte Carlo Sampling Metropolis Algorithm
 
-## Rolling a two dies
+## Rolling two dies
 
-## Proposal: Minimal Neighborhoods
+## Proposal function: Minimal Neighborhoods
 
 ## Target / True frequency: 
 
@@ -18,7 +18,7 @@ f <- c(0:6,5:1)
 
 N <- 2000
 
-# Proposal 'matrix'
+## Proposal function
 
 g <- function(x, ycut) {
   if (x == 2) {
@@ -31,7 +31,7 @@ g <- function(x, ycut) {
   return(y)
 }
 
-# Acceptance 'criterion'
+## Acceptance 'criterion'
 
 
 h <- function(x,y) {
@@ -39,9 +39,9 @@ h <- function(x,y) {
   return(value)
 }
 
-# Loop
+## Loop
 
-x0 <- 5 # initialize x
+x0 <- 5 ## initialize x
 
 result <- c()
 
