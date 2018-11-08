@@ -1,7 +1,7 @@
 ```r
 ## Part 4 Stacks and Queues, 
 
-## Stack class, with some modifications
+## Array-based Stack, with some modifications
 
 aStack <- setRefClass(Class  = "aStack",
                       fields = list(
@@ -70,7 +70,7 @@ aStack <- setRefClass(Class  = "aStack",
                           if (isEmpty()) {
                             print('The stack is empty.')
                           } else {
-                            tailvals <- arrayStack[c(n:1)]
+                            tailvals <- arrayStack[c(n:1L)]
                             return(tailvals)
                           }
                           
