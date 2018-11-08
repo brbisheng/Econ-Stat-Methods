@@ -78,7 +78,7 @@ aStack <- setRefClass(Class  = "aStack",
                       )
 )
 
-k <- aStack$new()
+k <- aStack$new(defaultSize= 5L)
 
 k$push(1L)
 k$push(2L)
