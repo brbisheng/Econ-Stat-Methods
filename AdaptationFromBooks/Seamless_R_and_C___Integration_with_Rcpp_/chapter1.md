@@ -1,7 +1,9 @@
 
 ### 1.2 First Example, Fibonacci sequences 
 
-**1st solution**
+(Be careful, I always do some adaptions based on the original code!)
+
+------**1st solution**-----
 
 ```r
 library(Rcpp)
@@ -53,3 +55,7 @@ fibcpp(-1)
 
 microbenchmark::microbenchmark(fibR(20), fibcpp(20))
 ```
+
+
+------**2nd solution**-----
+
