@@ -1,4 +1,6 @@
 
+### 1.2 First Example, 1st solution
+
 ```r
 library(Rcpp)
 
