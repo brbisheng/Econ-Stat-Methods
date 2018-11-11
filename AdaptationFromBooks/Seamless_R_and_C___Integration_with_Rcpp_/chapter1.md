@@ -91,17 +91,7 @@ cppinline1 <- '
 
 using namespace Rcpp;
 
-// This is a simple example of exporting a C++ function to R. You can
-// source this function into an R session using the Rcpp::sourceCpp 
-// function (or via the Source button on the editor toolbar). Learn
-// more about Rcpp at:
-  //
-  //   http://www.rcpp.org/
-  //   http://adv-r.had.co.nz/Rcpp.html
-//   http://gallery.rcpp.org/
-  //
-  
-  // [[Rcpp::export]]
+// [[Rcpp::export]]
 
 class Fib {
   
@@ -114,7 +104,7 @@ class Fib {
     memo[1] = 1.0;
     memo[2] = 1.0;
   };
-  //
+  // fibonacci method.
     double fibonacci(int n){
       if (n <  0) {
         std::cout << "Negative Input.";
