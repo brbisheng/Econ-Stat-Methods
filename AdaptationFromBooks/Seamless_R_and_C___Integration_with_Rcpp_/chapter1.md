@@ -1,7 +1,7 @@
 
 ### 1.2 First Example, Fibonacci sequences 
 
-(Be careful, I always do some adaptions based on the original code!)
+(cautious, I always do some adaptions based on the original code..)
 
 ------**1st solution**-----
 
