@@ -16,16 +16,6 @@ myfunc(5)
 using namespace Rcpp;
 using namespace std;
 
-// This is a simple example of exporting a C++ function to R. You can
-// source this function into an R session using the Rcpp::sourceCpp 
-// function (or via the Source button on the editor toolbar). Learn
-// more about Rcpp at:
-//
-//   http://www.rcpp.org/
-//   http://adv-r.had.co.nz/Rcpp.html
-//   http://gallery.rcpp.org/
-//
-
 // [[Rcpp::export]]
 NumericVector timesTwo(NumericVector x) {
   return x * 2;
@@ -34,13 +24,16 @@ NumericVector timesTwo(NumericVector x) {
 // void findLength(unsigned short val);
 
 void findLength(unsigned short val){
-  int j, result;
-  result = val;
+  int j, quotient;
+  quotient = val;
   j = 0;
-  while (result > 0) {
+  // Find the power of the leading term.
+  while (quotient > 0) {
     j = j + 1;
-    result = result / 2;
+    quotient = quotient / 2;
   }
+  // The power of the leading term is j-1.
+  // However, the length of the binary representation is j.
   cout << j-1;
   }
 
