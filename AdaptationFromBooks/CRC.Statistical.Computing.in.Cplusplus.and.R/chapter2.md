@@ -5,11 +5,11 @@
 - The 2nd step is to find the binary representation
 
 ```r
-## Run in r.
+##### Run the following lines in r.
 sourceCpp("ch2.cpp")
 myfunc(5)
 
-## The following a .cpp file!
+##### The following is from a .cpp file!
 # include <Rcpp.h>
 # include <iostream>
 # include <cmath>
@@ -17,14 +17,9 @@ myfunc(5)
 using namespace Rcpp;
 using namespace std;
 
-// [[Rcpp::export]]
-NumericVector timesTwo(NumericVector x) {
-  return x * 2;
-}
-
 // void findLength(unsigned short val);
 
-void findLength(unsigned short val){
+int findLength(unsigned short val){
   int j, quotient;
   quotient = val;
   j = 0;
@@ -35,21 +30,30 @@ void findLength(unsigned short val){
   }
   // The power of the leading term is j-1.
   // However, the length of the binary representation is j.
-  cout << j-1;
+  // cout << j-1;
+  return j-1;
   }
 
+void printBinary(int val, int len) {
+  for (int i = len; i >= 0; i--) {
+    if (val & (1 << i)) {
+      cout << "1";
+    } else {
+      cout << "0";
+    }
+  }
+};
+
 // [[Rcpp::export]]
-
-int myfunc(unsigned short inVal) {
+void myfunc(unsigned short inVal) {
   
-//  cout << "Enter an integer: ";
-//  cin >> inVal;
-//  cout << "Your number is of length: ";
-  findLength(inVal);
-  cout << endl;
-  return -1;
-}
-
+  int bitlength;
+  bitlength = findLength(inVal);
+  
+  printBinary(inVal, bitlength);
+  //cout << endl;
+  //return bitlength;
+};
 
 
 
