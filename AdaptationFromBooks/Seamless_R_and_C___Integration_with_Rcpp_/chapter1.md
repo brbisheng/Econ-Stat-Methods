@@ -146,3 +146,53 @@ mfibRcpp(10)
 
 microbenchmark::microbenchmark(mfibR(10), mfibRcpp(10))
 ```
+
+------- **Third Method**-------
+
+```r
+######### Part 1, Third example - linear, interative solution
+
+## R version..
+
+fibRiter <- function(n) {
+  
+  if (n%%1!=0) {return('Invalid Input.')}
+  
+  ## We only pay attention to 3 consecutive elements each time. 
+  
+  f_n0  <- 0    ## The first element
+  f_n1  <- 1    ## The second element
+  f_n2  <- 0    ## The third element
+  
+  for (i in 1:n) {
+    f_n2  <- f_n1 + f_n0
+    f_n0  <- f_n1
+    f_n1  <- f_n2
+  }
+  
+  return(f_n0)
+}
+
+fibRiter(5)
+
+## C++ version
+
+fibRcppIter <- inline::cxxfunction(signature(xs = "int"),
+                                   plugin = 'Rcpp',
+                                   body = '
+                                   int n = Rcpp::as<int>(xs);
+                                   double f_n0 = 0;
+                                   double f_n1 = 1;
+                                   double f_n2 = 0;
+                                   for (int i = 0; i<n ;i++) {
+                                     f_n2 = f_n0 + f_n1;
+                                     f_n0 = f_n1;
+                                     f_n1 = f_n2;
+                                   }
+                                   return Rcpp::wrap(f_n0);
+
+                                   ')
+fibRcppIter(10)
+
+microbenchmark::microbenchmark(fibRiter(10), fibRcppIter(10))
+```
