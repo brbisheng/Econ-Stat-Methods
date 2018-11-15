@@ -1,6 +1,8 @@
 
 ### Run in R
 
+ ---- IntegerVector
+
 ```r
 ## First example
 
@@ -55,4 +57,27 @@ func <-
                       src, plugin = "Rcpp")
 
 func(c(1,10,9))
+```
+
+-------- NumericVector
+
+```r
+## Second example.. without using clone.
+
+src <- '
+Rcpp::NumericVector invec(vec_type_in_R);
+Rcpp::NumericVector outvec(vec_type_in_R);
+for (int i=0; i<invec.size(); i++){
+  outvec[i] = log(invec[i]);
+}
+return outvec;
+'
+
+fun <- 
+  inline::cxxfunction(signature(vec_type_in_R = "numeric"),
+                      src, plugin = "Rcpp")
+
+x <- c(1:3)
+
+cbind(x,fun(x))
 ```
