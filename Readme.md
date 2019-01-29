@@ -1,4 +1,4 @@
-(This site is still under construction. When I was implementing the methods, I often encounger efficiency issue, especially for non-parametric methods. Thus, I am currently having courses on algorithms. I will come back, I am very thankful for people who contacted me and gave me suggestions.)
+(When I was implementing the methods, I often encountered efficiency issues, especially for non-parametric methods. Thus, I think I am currently having courses on algorithms. I will come back and continue the update, I am very thankful for people who contacted me and gave me suggestions.)
 
 ***
 Forewords:
