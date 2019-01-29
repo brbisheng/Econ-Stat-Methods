@@ -1,11 +1,11 @@
+(This site is still under construction. When I was implementing the methods, I often encounger efficiency issue, especially for non-parametric methods. Thus, I am currently having courses on algorithms. I will come back, I am very thankful for people who contacted me and gave me suggestions.)
+
 ***
 Forewords:
 
-1. Recently, I started a **(long-term)** freelance project: Algorithms from scratch. This page is dedicated to implementing statistical/econometric methods from scratch. You could also find implementation of machine learning methods [here](https://brbisheng.github.io/algorithms/).
+1. This page is dedicated to implementing statistical/econometric methods from scratch. You could also find implementation of machine learning methods [here](https://brbisheng.github.io/algorithms/).
 
-2. So what I do is to transform all my understandings of the statistical/econometric methods from **academic papers** and **textbooks** to code. Why? Many of the papers do not provide code, just algorithmes. When I try to implement their methods by myself, for 20% of the time I find mistakes. So, let us do it from scratch for the sake of better understanding them and inventing our own methods.
-
-3. This site is still under construction, the structure may vary, but I try keep working to make it indeed a **long-term** project and a place useful for people.  
+2. So what I do is to transform all my understandings of the statistical/econometric methods from **academic papers** and **textbooks** to code. Why? Many of the papers do not provide code. When I try to implement their methods, for 20% of the time I could find mistakes. Thus trying to write algorithms from scratch could help with our understanding and inventing our own methods.  
 
 > Update: I am updating the sites from .markdown to .html, so many parts are unorganized for this moment, I will try to fix the issues as soon as I could.
 > 11/12/2018: Fixing speed issues for CDF bandwidth selection. The solution is combine C++ and R.
