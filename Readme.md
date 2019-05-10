@@ -1,4 +1,6 @@
 
+https://askubuntu.com/questions/712339/how-to-upgrade-pip-to-latest
+
 instrumental variable, causal graphs
 - Using instrumental variables to establish causality
     - https://wol.iza.org/uploads/articles/250/pdfs/using-instrumental-variables-to-establish-causality.pdf
