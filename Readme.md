@@ -1,3 +1,11 @@
+
+instrumental variable, causal graphs
+- Using instrumental variables to establish causality
+    - https://wol.iza.org/uploads/articles/250/pdfs/using-instrumental-variables-to-establish-causality.pdf
+
+
+***
+
 (When I was implementing the methods, I was quite concerned with efficiency issues, especially for non-parametric methods. So currently I am having courses on algorithms. I will come back and continue the update, I am very thankful for people who contacted me and gave me suggestions. If you encountered some difficulties in implementing your econometric/statistical methods, you are very welcomed to contact me through linkedin!)
 
 ***
