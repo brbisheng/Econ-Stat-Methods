@@ -2,6 +2,8 @@
 instrumental variable, causal graphs
 - Using instrumental variables to establish causality
     - https://wol.iza.org/uploads/articles/250/pdfs/using-instrumental-variables-to-establish-causality.pdf
+- Lectures on DAG: 
+    - https://www.stat.cmu.edu/~cshalizi/402/lectures/23-causal-estimation/lecture-23.pdf
 
 
 ***
