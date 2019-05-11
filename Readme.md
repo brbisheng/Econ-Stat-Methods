@@ -1,5 +1,8 @@
 
-https://askubuntu.com/questions/712339/how-to-upgrade-pip-to-latest
+Colection of best lectures.
+- Shalizi
+    - Homepage: https://www.stat.cmu.edu/~cshalizi/
+    - Teaching..
 
 instrumental variable, causal graphs
 - Using instrumental variables to establish causality
@@ -7,10 +10,12 @@ instrumental variable, causal graphs
 - Lectures on DAG: 
     - https://www.stat.cmu.edu/~cshalizi/402/lectures/23-causal-estimation/lecture-23.pdf
 
+cloud ubuntu extras:
+- https://askubuntu.com/questions/712339/how-to-upgrade-pip-to-latest
 
 ***
 
-(When I was implementing the methods, I was quite concerned with efficiency issues, especially for non-parametric methods. So currently I am having courses on algorithms. I will come back and continue the update, I am very thankful for people who contacted me and gave me suggestions. If you encountered some difficulties in implementing your econometric/statistical methods, you are very welcomed to contact me through linkedin!)
+(bla..bla..bla..)
 
 ***
 Forewords:
