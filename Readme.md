@@ -1,8 +1,16 @@
 
-Colection of best lectures.
+Collection of best lectures.
 - Shalizi
     - Homepage: https://www.stat.cmu.edu/~cshalizi/
     - Teaching..
+
+Currently reading ...
+- Russell
+    - Introduction to Mathematical Philosophy
+- Jaynes
+    - Logic
+- HMM
+    - Hidden_Markov_Models_for_Time_Series__An_Introduction_Using_R
 
 instrumental variable, causal graphs
 - Using instrumental variables to establish causality
