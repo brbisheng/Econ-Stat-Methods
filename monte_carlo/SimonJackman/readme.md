@@ -4,7 +4,7 @@ The objective:
 
 # Chapter III
 ```r
-## Uniform, mean, standard deviation, and quantile.
+## EXAMPLE 1: Uniform. Approximating mean, standard deviation, and quantile using Monte Carlo.
 
 set.seed(123)
 
@@ -111,4 +111,5 @@ graphs$bias <- function( n = temp$T) {
     gridExtra::grid.arrange(p1, p2, p3, nrow = 3)
 }
 
+graphs$bias()
 ```
