@@ -1,15 +1,16 @@
 *** 
 Forewords:
 
-This page is dedicated to implementing statistical/econometric methods from scratch. 
+This project is dedicated to implementing statistical/econometric methods **from scratch**. 
+
+- (Nonparametric principles)[https://github.com/brbisheng/Econ-Stat-Methods/tree/master/Nonparametric%20principles]
 
 
-***** 
-
+****
 Collection of best lectures.
 - Shalizi
     - Homepage: https://www.stat.cmu.edu/~cshalizi/
-    - Teaching..
+    - folder: Teaching
 
 Currently reading ...
 - Russell
@@ -19,11 +20,11 @@ Currently reading ...
 - HMM
     - Hidden_Markov_Models_for_Time_Series__An_Introduction_Using_R
 
-instrumental variable, causal graphs
+Instrumental variable, causal graphs
 - Using instrumental variables to establish causality
     - https://wol.iza.org/uploads/articles/250/pdfs/using-instrumental-variables-to-establish-causality.pdf
 - Lectures on DAG: 
     - https://www.stat.cmu.edu/~cshalizi/402/lectures/23-causal-estimation/lecture-23.pdf
 
-cloud ubuntu extras:
+Cloud ubuntu extras:
 - https://askubuntu.com/questions/712339/how-to-upgrade-pip-to-latest
