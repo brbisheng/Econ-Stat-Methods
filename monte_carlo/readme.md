@@ -1,3 +1,5 @@
+0. Foundations of Bayesian Analysis
+    - Hypothesis Testing
 
 1. Bayesian analysis for simple models
   - 
