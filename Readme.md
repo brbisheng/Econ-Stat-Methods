@@ -5,6 +5,7 @@ This project is dedicated to implementing statistical/econometric methods **from
 
 - [Nonparametric principles](https://github.com/brbisheng/Econ-Stat-Methods/tree/master/Nonparametric%20principles)
 
+- [Monte Carlo Methods](https://github.com/brbisheng/Econ-Stat-Methods/tree/master/monte_carlo)
 
 ****
 Collection of best lectures.
