@@ -3,7 +3,7 @@ Forewords:
 
 This project is dedicated to implementing statistical/econometric methods **from scratch**. 
 
-- (Nonparametric principles)[https://github.com/brbisheng/Econ-Stat-Methods/tree/master/Nonparametric%20principles]
+- [Nonparametric principles](https://github.com/brbisheng/Econ-Stat-Methods/tree/master/Nonparametric%20principles)
 
 
 ****
