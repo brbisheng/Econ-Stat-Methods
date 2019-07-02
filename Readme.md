@@ -3,7 +3,7 @@ Forewords:
 
 This project is dedicated to implementing statistical/econometric methods **from scratch**. 
 
-Please visit my blog: (brbisheng.github.io)
+Please visit [my blog](brbisheng.github.io)
 
 ****
 Collection of best lectures.
